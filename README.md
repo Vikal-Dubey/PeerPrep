@@ -1,8 +1,8 @@
-# 🚀 PeerPrep (HireSense-AI) — Collaborative AI Interview Platform
+# 🚀 PeerPrep — Collaborative AI Interview Platform
 
 PeerPrep is a state-of-the-art, full-stack collaborative platform designed to revolutionize technical preparation and remote interviewing. It bridges the gap between candidates and interviewers by combining real-time synced document/code editing, peer-to-peer WebRTC video calls, sandbox code compilation, and Google's Gemini AI for ATS resume scoring and candidate evaluation scorecard generation.
 
-Currently, the project has successfully completed **Phase 1 (Setup)** and **Phase 2 (Database & Authentication)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM and secure JWT-based session tracking.
+Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, and **Phase 3 (Real-Time Sockets)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, and real-time Socket.io workspace syncing.
 
 ---
 
@@ -144,7 +144,7 @@ export const DataProvider = ({ children }) => {
 ## 📁 Project Structure
 
 ```
-HireSense-AI/ (PeerPrep)
+PeerPrep/
 ├── backend/
 │   ├── controllers/
 │   │   └── authControllers.js    # Sign-up, login, and validation logic
@@ -197,9 +197,14 @@ stateDiagram-v2
         [*] --> PostgreSQLSchema
         PostgreSQLSchema --> JWTCookieAuth
     }
+    state Phase3 {
+        [*] --> SocketInitialization
+        SocketInitialization --> RoomManagement
+    }
 
     style Phase1 fill:#10b981,color:#fff
     style Phase2 fill:#10b981,color:#fff
+    style Phase3 fill:#10b981,color:#fff
 ```
 
 ### ✅ Completed Features
@@ -209,10 +214,12 @@ stateDiagram-v2
     *   Designed schema blueprints in Prisma mapping to active PostgreSQL tables.
     *   Engineered Bcrypt password salting pipelines and HTTP-only cookie-based JWT sessions.
     *   Built context wrappers in React for state monitoring, logging, and account page actions.
+*   [x] **Phase 3: Real-Time Sockets (Socket.io)**
+    *   Configured server-side Socket.io initialization with CORS verification.
+    *   Engineered a room session tracker in the backend to manage user join/leave states.
+    *   Exposed socket connectivity via global React context and built the dynamic `/room/:roomId` participant lobby UI.
 
 ### 🚀 Up Next
-*   [ ] **Phase 3: Real-Time Sockets (Socket.io)**
-    *   Integrate server socket instances enabling client connections to isolated, passwordless virtual rooms.
 *   [ ] **Phase 4: Collaborative Workspace**
     *   Bind Monaco Code Editor and ReactQuill Notepad updates to transmit edit deltas via socket pathways.
 *   [ ] **Phase 5: Code Compilation (Judge0 Integration)**
