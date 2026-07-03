@@ -148,29 +148,44 @@ PeerPrep/
 ├── backend/
 │   ├── controllers/
 │   │   └── authControllers.js    # Sign-up, login, and validation logic
-│   ├── routes/
-│   │   └── authRoutes.js         # Express endpoint mappings
 │   ├── db/
 │   │   └── prismaClient.js       # Prisma Client wrapper initialization
 │   ├── prisma/
+│   │   ├── migrations/           # Database schema migrations
 │   │   └── schema.prisma         # PostgreSQL models & database setup
-│   ├── .env.example              # Template for server-side config
+│   ├── routes/
+│   │   └── authRoutes.js         # Express endpoint mappings
+│   ├── sockets/
+│   │   └── socketHandlers.js     # Socket.io room and connection handlers
+│   ├── .env                      # Server configuration & environment variables
+│   ├── package.json              # Backend dependencies and scripts
+│   ├── prisma.config.ts          # Custom prisma execution options
 │   └── server.js                 # App configuration & middleware gateway
 │
 └── frontend/
+    ├── public/                   # Static browser assets
     ├── src/
-    │   ├── pages/
-    │   │   ├── Home.jsx          # Protected dynamic home dashboard
-    │   │   ├── Login.jsx         # Sign-in panel interface
-    │   │   └── Signup.jsx        # Registration panel interface
+    │   ├── assets/               # Local icons and images
     │   ├── context/
     │   │   ├── DataContext.jsx   # Context hook definition
     │   │   └── DataProvider.jsx  # Wrapper for global state mapping
+    │   ├── pages/
+    │   │   ├── Home.jsx          # Protected dynamic home dashboard
+    │   │   ├── Login.jsx         # Sign-in panel interface
+    │   │   ├── Room.jsx          # Real-time WebSocket workspace/lobby page
+    │   │   └── Signup.jsx        # Registration panel interface
     │   ├── utils/
-    │   │   └── api.js            # Structured API query instance (fetch layer)
+    │   │   ├── api.js            # Structured API query instance (fetch layer)
+    │   │   └── socket.js         # Socket.io-client connection instance
+    │   ├── App.css               # Global application styles
     │   ├── App.jsx               # Application navigation and routes
-    │   └── main.jsx              # Client entry point
-    └── package.json
+    │   ├── index.css             # Tailwind base and entry styles
+    │   └── main.jsx              # DOM entry point and react initialization
+    ├── .env                      # Frontend environment setup
+    ├── eslint.config.js          # Code syntax check configurations
+    ├── index.html                # Vite client target template
+    ├── package.json              # Client dependencies and build scripts
+    └── vite.config.js            # Vite compiler configuration
 ```
 
 ---
