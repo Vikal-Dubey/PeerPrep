@@ -2,7 +2,7 @@
 
 PeerPrep is a state-of-the-art, full-stack collaborative platform designed to revolutionize technical preparation and remote interviewing. It bridges the gap between candidates and interviewers by combining real-time synced document/code editing, peer-to-peer WebRTC video calls, sandbox code compilation, and Google's Gemini AI for ATS resume scoring and candidate evaluation scorecard generation.
 
-Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, and **Phase 3 (Real-Time Sockets)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, and real-time Socket.io workspace syncing.
+Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, and **Phase 3 (Real-Time Sockets & Room Persistence)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, and a database-backed Room allocation model.
 
 ---
 
@@ -93,15 +93,16 @@ graph TD
 
 ---
 
-## 🔐 Authentication System & Core Features
+## 🔐 Authentication, Room Management & Core Features
 
+### 👤 Authentication System
 Currently fully implemented and secured:
 
 *   **Password Security:** Plaintext passwords are salted and hashed using `bcryptjs` before committing to the PostgreSQL schema.
 *   **Secure Session Handling:** JWT tokens are issued upon successful authentication and delivered directly inside secure, **HTTP-only cookies**. This secures tokens against client-side script extraction (XSS protection).
 *   **CORS Configuration:** Built-in verification filters validate origin requests, permitting reliable credentials handshakes only for trusted client URLs.
 
-### Active Authentication Routes
+#### Active Authentication Routes
 *   `POST /api/register` — Create a new account (Username, Email, Password).
 *   `POST /api/login` — Validate credentials, generate JWT, and attach cookie payload.
 
@@ -109,6 +110,23 @@ Currently fully implemented and secured:
 [User Forms] ───> [API Util / Fetch] ───> [Express Backend] ───> [Prisma ORM] ───> [PostgreSQL]
       │                                                                               │
 [Home UI State] <─── [React Context] <─── [HTTP-only Cookie JWT Issued] <─────────────┘
+```
+
+### 🏠 Room Management & Database Persistence
+To support collaborative video calls and workspace synchronization, we have added database-backed room persistence:
+
+*   **Room Schema Mapping:** The database includes a relational `Room` table mapping directly to host users, complete with a `RoomStatus` enum (`ACTIVE` or `ENDED`) and dynamic expiration times.
+*   **Clean Room Code Generator:** Room links use an easily readable, dash-separated alphabet code (e.g. `xk3f-9qp2-mv7t`) generated using a customized `nanoid` instance that avoids confusing characters (such as `l`, `o`, `I`, `0`).
+*   **Protected Access Middleware:** Room setup, joining, and validation requests are protected by a server-side `requireAuth` cookie-parsing middleware.
+*   **Client Dashboard Control:** React clients navigate to a `/dashboard` room lobby where they can instantly create a meeting or submit a room code to join an active workspace.
+
+#### Active Room Routes
+*   `POST /api/rooms` — Create a new room with a random, user-friendly code (requires authentication).
+*   `POST /api/rooms/join` — Validate an active room code before entering (requires authentication).
+*   `GET /api/rooms/:code` — Retrieve room verification details (requires authentication).
+
+```
+ [Create/Join Action] ───> [requireAuth Middleware] ───> [nanoid Code Generator] ───> [Prisma Client] ───> [PostgreSQL Room Table]
 ```
 
 ---
@@ -147,16 +165,22 @@ export const DataProvider = ({ children }) => {
 PeerPrep/
 ├── backend/
 │   ├── controllers/
-│   │   └── authControllers.js    # Sign-up, login, and validation logic
+│   │   ├── authControllers.js    # Sign-up, login, and validation logic
+│   │   └── roomControllers.js    # Room creation, joining, and status logic
 │   ├── db/
 │   │   └── prismaClient.js       # Prisma Client wrapper initialization
+│   ├── middleware/
+│   │   └── requireAuth.js        # Authentication cookie verification middleware
 │   ├── prisma/
 │   │   ├── migrations/           # Database schema migrations
 │   │   └── schema.prisma         # PostgreSQL models & database setup
 │   ├── routes/
-│   │   └── authRoutes.js         # Express endpoint mappings
+│   │   ├── authRoutes.js         # Express endpoint mappings
+│   │   └── roomRoutes.js         # Express room management endpoints
 │   ├── sockets/
 │   │   └── socketHandlers.js     # Socket.io room and connection handlers
+│   ├── utils/
+│   │   └── generateRoomCode.js   # Generates human-friendly dash-separated codes
 │   ├── .env                      # Server configuration & environment variables
 │   ├── package.json              # Backend dependencies and scripts
 │   ├── prisma.config.ts          # Custom prisma execution options
@@ -170,6 +194,7 @@ PeerPrep/
     │   │   ├── DataContext.jsx   # Context hook definition
     │   │   └── DataProvider.jsx  # Wrapper for global state mapping
     │   ├── pages/
+    │   │   ├── Dashboard.jsx     # Room creation and entry dashboard
     │   │   ├── Home.jsx          # Protected dynamic home dashboard
     │   │   ├── Login.jsx         # Sign-in panel interface
     │   │   ├── Room.jsx          # Real-time WebSocket workspace/lobby page
@@ -229,10 +254,12 @@ stateDiagram-v2
     *   Designed schema blueprints in Prisma mapping to active PostgreSQL tables.
     *   Engineered Bcrypt password salting pipelines and HTTP-only cookie-based JWT sessions.
     *   Built context wrappers in React for state monitoring, logging, and account page actions.
-*   [x] **Phase 3: Real-Time Sockets (Socket.io)**
+*   [x] **Phase 3: Real-Time Sockets & Room Management (Socket.io & DB Persistence)**
     *   Configured server-side Socket.io initialization with CORS verification.
     *   Engineered a room session tracker in the backend to manage user join/leave states.
-    *   Exposed socket connectivity via global React context and built the dynamic `/room/:roomId` participant lobby UI.
+    *   Added a `Room` table to the database connected with Prisma PostgreSQL models.
+    *   Designed nanoid-based readable room codes, custom `requireAuth` security middleware, and Express API endpoints.
+    *   Built the frontend `Dashboard.jsx` meeting lobby and updated the `/room/:roomId` real-time state listeners.
 
 ### 🚀 Up Next
 *   [ ] **Phase 4: Collaborative Workspace**
