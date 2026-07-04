@@ -1,3 +1,5 @@
+import { prisma } from "../db/prismaClient.js";
+
 // Tracks which users are in which room: { roomId: [{ socketId, username }] }
 const rooms = new Map();
 
@@ -5,7 +7,14 @@ export const registerSocketHandlers = (io) => {
   io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.id}`);
 
-    socket.on("joinRoom", ({ roomId, username }) => {
+    socket.on("joinRoom", async ({ roomId, username }) => {
+      const room = await prisma.room.findUnique({ where: { code: roomId } });
+
+      if (!room || room.status !== "ACTIVE") {
+        socket.emit("room-error", { message: "Room not found" });
+        return;
+      }
+      
       socket.join(roomId);
       socket.data.roomId = roomId;
       socket.data.username = username;
