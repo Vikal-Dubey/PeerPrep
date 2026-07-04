@@ -4,20 +4,6 @@ PeerPrep is a state-of-the-art, full-stack collaborative platform designed to re
 
 Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, and **Phase 3 (Real-Time Sockets & Room Persistence)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, and a database-backed Room allocation model.
 
----
-
-## 🎨 Naming & Branding Vision
-
-To reflect both the developer-focused collaboration tools and high-end AI intelligence features, the platform's positioning leverages the following naming directions:
-
-| Theme | Suggested Names | Brand Pitch / Focus |
-| :--- | :--- | :--- |
-| **Collaborative & Sync** | `PrepSync` / `SyncHire` | Focuses on real-time room sharing and working together. |
-| **AI & Intelligence** | `Intervue.ai` / `HirePulse` / `MockMind` | Emphasizes smart evaluation, resume scoring, and AI mock questions. |
-| **Developer-Focused** | `CodeMock` / `DevIntervue` / `PeerPrep` | Highlights the integrated Monaco code compiler and PeerJS video calls. |
-| **Modern & Premium** | `TalentFlow` / `AuraPrep` / `AceSession` | Premium, sleek naming suited for high-end SaaS platforms. |
-
-*Note: The current development workspace and database configurations are registered under **PeerPrep**.*
 
 ---
 
