@@ -21,7 +21,7 @@ const Signup = () => {
     try {
       const result = await registerUser(form);
       setUser(result.user);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {
