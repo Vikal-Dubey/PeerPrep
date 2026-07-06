@@ -23,3 +23,23 @@ export const loginUser = async (data) => {
   if (!res.ok) throw new Error(result.message || "Login failed");
   return result;
 };
+
+export const getCurrentUser = async () => {
+  const res = await fetch(`${API_URL}/api/me`, {
+    credentials: "include",
+  });
+
+  if(!res.ok) {
+    return null;
+  }
+  const result = await res.json();
+  return result.user;
+}
+
+export const logoutUser = async () => {
+  const res = await fetch(`${API_URL}/api/logout`, {
+    method: "POST",
+    credentials: "include",
+  })
+  return res.ok;
+};

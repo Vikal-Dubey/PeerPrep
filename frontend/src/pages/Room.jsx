@@ -2,14 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 const Room = () => {
   const { roomId: code } = useParams();
-  const { user, socket } = useContext(DataContext);
+  const { user, socket, authChecked  } = useContext(DataContext);
   const [participants, setParticipants] = useState([]);
   const [status, setStatus] = useState("checking"); // checking | valid | invalid
   const navigate = useNavigate();
-
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   // Step 1: verify the room exists before doing anything socket-related
   useEffect(() => {
@@ -29,7 +29,7 @@ const Room = () => {
 
   // Step 2: only join the socket room once verified
   useEffect(() => {
-    if (status !== "valid") return;
+    if (status !== "valid" || !authChecked) return;// wait until we know the real user
 
     const username = user?.username || `Guest-${Math.floor(Math.random() * 1000)}`;
 
@@ -43,7 +43,7 @@ const Room = () => {
 
     // NEW — listen for server-side rejection
   socket.on("room-error", () => setStatus("invalid"));
-  
+
     return () => {
       socket.emit("leaveRoom", { roomId: code });
       socket.off("room-users", handleRoomUsers);
