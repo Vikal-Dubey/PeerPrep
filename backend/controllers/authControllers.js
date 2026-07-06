@@ -64,3 +64,26 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getMe = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {id: req.userId },
+      select: {id: true, username: true, email: true}
+    });
+
+    if(!user) {
+      return res.status(404).json({message: "User not found"});
+    }
+    
+    res.set("Cache-Control", "no-store"); // prevent browser caching this response
+    res.status(200).json({ user });
+  } catch (err) {
+    res.status(500).json({ message: err.message});
+  }
+}
+
+export const logoutUser = (req, res) => {
+  res.clearCookie("token", { httpOnly: true, sameSite: "strict" });
+  res.status(200).json({ message: "Logged out successfully" });
+};
