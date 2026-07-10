@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
+import CodeEditor from "../components/CodeEditor";
+import Notepad from "../components/Notepad";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -49,7 +51,7 @@ const Room = () => {
       socket.off("room-users", handleRoomUsers);
       socket.off("connect", doJoin);
     };
-  }, [status, code, socket, user]);
+  }, [status, code, socket, user, authChecked]);
 
   if (status === "checking") {
     return <div className="min-h-screen flex items-center justify-center">Checking room...</div>;
@@ -70,17 +72,24 @@ const Room = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold mb-4">Room: {code}</h1>
-      <div className="bg-white rounded-lg shadow p-4">
-        <h2 className="font-semibold mb-2">Participants ({participants.length})</h2>
-        <ul className="list-disc list-inside">
-          {participants.map((p) => (
-            <li key={p.socketId}>{p.username}</li>
-          ))}
-        </ul>
+     <div className="min-h-screen bg-gray-100 p-6">
+    <div className="flex items-center justify-between mb-4">
+      <h1 className="text-2xl font-bold">Room: {code}</h1>
+      <div className="bg-white rounded-lg shadow px-4 py-2">
+        <span className="text-sm font-semibold">
+          Participants ({participants.length}):{" "}
+        </span>
+        <span className="text-sm">
+          {participants.map((p) => p.username).join(", ")}
+        </span>
       </div>
     </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <CodeEditor roomId={code} socket={socket} />
+      <Notepad roomId={code} socket={socket} />
+    </div>
+  </div>
   );
 };
 

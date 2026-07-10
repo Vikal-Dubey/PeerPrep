@@ -37,6 +37,21 @@ export const registerSocketHandlers = (io) => {
       socket.to(roomId).emit("user-joined", { socketId: socket.id, username });
     });
 
+    // Code editor sync
+    socket.on("code-change", ({ roomId, code, language }) => {
+      socket.to(roomId).emit("code-update", { code, language });
+    });
+
+    // Cursor/selection sync (optional but nice — shows where others are typing)
+    socket.on("cursor-change", ({ roomId, position, username }) => {
+      socket.to(roomId).emit("cursor-update", { socketId: socket.id, position, username });
+    });
+
+    // Notepad sync
+    socket.on("text-change", ({ roomId, content }) => {
+      socket.to(roomId).emit("text-update", { content });
+    });
+
     socket.on("leaveRoom", ({ roomId }) => {
       leaveRoom(socket, roomId, io);
     });
