@@ -75,6 +75,14 @@ export const registerSocketHandlers = (io) => {
       leaveRoom(socket, roomId, io);
     });
 
+    socket.on("run-code-start", ({ roomId }) => {
+      socket.to(roomId).emit("code-running");
+    });
+
+    socket.on("code-output", ({ roomId, output }) => {
+      io.to(roomId).emit("output-update", output); // include sender too
+    });
+
     socket.on("disconnect", () => {
       const roomId = socket.data.roomId;
       if (roomId) {

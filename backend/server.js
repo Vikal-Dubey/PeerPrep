@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import roomRoutes from "./routes/roomRoutes.js";
+import compilerRoutes from "./routes/compilerRoutes.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import { registerSocketHandlers } from "./sockets/socketHandlers.js";
@@ -25,7 +26,7 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", roomRoutes);
-
+app.use("/api", compilerRoutes);
 app.use("/api", authRoutes);
 
 registerSocketHandlers(io);
