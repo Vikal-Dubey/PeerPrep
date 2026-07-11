@@ -2,7 +2,7 @@
 
 PeerPrep is a state-of-the-art, full-stack collaborative platform designed to revolutionize technical preparation and remote interviewing. It bridges the gap between candidates and interviewers by combining real-time synced document/code editing, peer-to-peer WebRTC video calls, sandbox code compilation, and Google's Gemini AI for ATS resume scoring and candidate evaluation scorecard generation.
 
-Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, **Phase 3 (Real-Time Sockets & Room Persistence)**, and **Phase 4 (Collaborative Workspace)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, database-backed Room allocation, and collaborative code and notepad editors.
+Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, **Phase 3 (Real-Time Sockets & Room Persistence)**, **Phase 4 (Collaborative Workspace)**, and **Phase 5 (Code Compilation)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, database-backed Room allocation, collaborative code/notepad editors, and secure code compilation proxies via Judge0.
 
 
 ---
@@ -152,6 +152,7 @@ PeerPrep/
 ├── backend/
 │   ├── controllers/
 │   │   ├── authControllers.js    # Sign-up, login, and validation logic
+│   │   ├── compilerControllers.js# Proxies code execution payload to Judge0 API
 │   │   └── roomControllers.js    # Room creation, joining, and status logic
 │   ├── db/
 │   │   └── prismaClient.js       # Prisma Client wrapper initialization
@@ -161,12 +162,14 @@ PeerPrep/
 │   │   ├── migrations/           # Database schema migrations
 │   │   └── schema.prisma         # PostgreSQL models & database setup
 │   ├── routes/
-│   │   ├── authRoutes.js         # Express endpoint mappings
+│   │   ├── authRoutes.js         # Express authentication routes
+│   │   ├── compilerRoutes.js     # Express code compilation route proxy
 │   │   └── roomRoutes.js         # Express room management endpoints
 │   ├── sockets/
-│   │   └── socketHandlers.js     # Socket.io room and connection handlers
+│   │   └── socketHandlers.js     # Socket.io room, editor, and output handlers
 │   ├── utils/
-│   │   └── generateRoomCode.js   # Generates human-friendly dash-separated codes
+│   │   ├── generateRoomCode.js   # Generates human-friendly dash-separated codes
+│   │   └── languageMap.js        # Maps editor languages to Judge0 language IDs
 │   ├── .env                      # Server configuration & environment variables
 │   ├── package.json              # Backend dependencies and scripts
 │   ├── prisma.config.ts          # Custom prisma execution options
@@ -178,7 +181,8 @@ PeerPrep/
     │   ├── assets/               # Local icons and images
     │   ├── components/
     │   │   ├── CodeEditor.jsx    # Collaborative Monaco code editor (multi-language)
-    │   │   └── Notepad.jsx       # Collaborative rich text editor using ReactQuill
+    │   │   ├── Notepad.jsx       # Collaborative rich text editor using ReactQuill
+    │   │   └── Output.jsx        # Synced compilation outputs and execution trigger
     │   ├── context/
     │   │   ├── DataContext.jsx   # Context hook definition
     │   │   └── DataProvider.jsx  # Wrapper for global state mapping
@@ -234,11 +238,16 @@ stateDiagram-v2
         [*] --> MonacoCodeEditor
         MonacoCodeEditor --> QuillRichTextNotepad
     }
+    state Phase5 {
+        [*] --> Judge0ProxyAPI
+        Judge0ProxyAPI --> OutputConsoleSync
+    }
 
     style Phase1 fill:#10b981,color:#fff
     style Phase2 fill:#10b981,color:#fff
     style Phase3 fill:#10b981,color:#fff
     style Phase4 fill:#10b981,color:#fff
+    style Phase5 fill:#10b981,color:#fff
 ```
 
 ### ✅ Completed Features
@@ -258,10 +267,13 @@ stateDiagram-v2
     *   Integrated the **Monaco Code Editor** component supporting syntax highlights for Javascript, Python, C++, Java, and C, with real-time room edits synchronization.
     *   Added a collaborative rich text **Shared Notes** notepad utilizing Quill, filtering program updates from user edits to avoid echo loops.
     *   Developed backend socket memory snapshots to persist latest code/notes buffers and push states directly to newly connected room members.
+*   [x] **Phase 5: Code Compilation & Output Sync (Judge0 Integration)**
+    *   Engineered a secure backend API proxy (`POST /api/compiler/run`) validating input payloads and forwarding runtime code execution to the **Judge0 API**.
+    *   Created a code-runner utility mapping frontend language selections to execution IDs via `languageMap.js`.
+    *   Built the frontend **Output Console** component supporting execution triggers, progress flags, standard outputs, standard errors, and compile errors.
+    *   Wired Socket.io hooks (`run-code-start` / `code-output`) to broadcast progress status and compile/runtime results to all room participants simultaneously.
 
 ### 🚀 Up Next
-*   [ ] **Phase 5: Code Compilation (Judge0 Integration)**
-    *   Secure backend proxies directing runtime code payloads to Judge0 API sandboxes for compiling.
 *   [ ] **Phase 6: P2P Audio & Video Calls (PeerJS)**
     *   Implement direct 1-to-1 WebRTC video feeds using PeerJS nodes.
 *   [ ] **Phase 7: AI Interviewer & Resume Analyzer (Gemini AI)**
@@ -284,6 +296,9 @@ Create a `.env` file under the `/backend` folder with the following variables:
 PORT=3000
 DATABASE_URL="postgresql://<username>:<password>@<host>:5432/<db_name>?schema=public"
 JWT_SECRET=your_super_secure_jwt_secret_key
+FRONTEND_URL=http://localhost:5173
+JUDGE0_API_HOST=your_judge0_api_rapidapi_host_url
+JUDGE0_API_KEY=your_judge0_api_rapidapi_key
 # Upcoming configurations
 GEMINI_API_KEY=your_gemini_api_token
 ```
