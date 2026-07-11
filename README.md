@@ -2,7 +2,7 @@
 
 PeerPrep is a state-of-the-art, full-stack collaborative platform designed to revolutionize technical preparation and remote interviewing. It bridges the gap between candidates and interviewers by combining real-time synced document/code editing, peer-to-peer WebRTC video calls, sandbox code compilation, and Google's Gemini AI for ATS resume scoring and candidate evaluation scorecard generation.
 
-Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, and **Phase 3 (Real-Time Sockets & Room Persistence)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, and a database-backed Room allocation model.
+Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, **Phase 3 (Real-Time Sockets & Room Persistence)**, and **Phase 4 (Collaborative Workspace)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, database-backed Room allocation, and collaborative code and notepad editors.
 
 
 ---
@@ -176,6 +176,9 @@ PeerPrep/
     ├── public/                   # Static browser assets
     ├── src/
     │   ├── assets/               # Local icons and images
+    │   ├── components/
+    │   │   ├── CodeEditor.jsx    # Collaborative Monaco code editor (multi-language)
+    │   │   └── Notepad.jsx       # Collaborative rich text editor using ReactQuill
     │   ├── context/
     │   │   ├── DataContext.jsx   # Context hook definition
     │   │   └── DataProvider.jsx  # Wrapper for global state mapping
@@ -227,10 +230,15 @@ stateDiagram-v2
         [*] --> SocketInitialization
         SocketInitialization --> RoomManagement
     }
+    state Phase4 {
+        [*] --> MonacoCodeEditor
+        MonacoCodeEditor --> QuillRichTextNotepad
+    }
 
     style Phase1 fill:#10b981,color:#fff
     style Phase2 fill:#10b981,color:#fff
     style Phase3 fill:#10b981,color:#fff
+    style Phase4 fill:#10b981,color:#fff
 ```
 
 ### ✅ Completed Features
@@ -239,17 +247,19 @@ stateDiagram-v2
 *   [x] **Phase 2: Database & Authentication**
     *   Designed schema blueprints in Prisma mapping to active PostgreSQL tables.
     *   Engineered Bcrypt password salting pipelines and HTTP-only cookie-based JWT sessions.
-    *   Built context wrappers in React for state monitoring, logging, and account page actions.
+    *   Built context wrappers in React for state monitoring, logging, and user validation check actions (`/api/me`).
 *   [x] **Phase 3: Real-Time Sockets & Room Management (Socket.io & DB Persistence)**
     *   Configured server-side Socket.io initialization with CORS verification.
     *   Engineered a room session tracker in the backend to manage user join/leave states.
     *   Added a `Room` table to the database connected with Prisma PostgreSQL models.
     *   Designed nanoid-based readable room codes, custom `requireAuth` security middleware, and Express API endpoints.
     *   Built the frontend `Dashboard.jsx` meeting lobby and updated the `/room/:roomId` real-time state listeners.
+*   [x] **Phase 4: Collaborative Workspace (Monaco Code Editor & Quill Notepad)**
+    *   Integrated the **Monaco Code Editor** component supporting syntax highlights for Javascript, Python, C++, Java, and C, with real-time room edits synchronization.
+    *   Added a collaborative rich text **Shared Notes** notepad utilizing Quill, filtering program updates from user edits to avoid echo loops.
+    *   Developed backend socket memory snapshots to persist latest code/notes buffers and push states directly to newly connected room members.
 
 ### 🚀 Up Next
-*   [ ] **Phase 4: Collaborative Workspace**
-    *   Bind Monaco Code Editor and ReactQuill Notepad updates to transmit edit deltas via socket pathways.
 *   [ ] **Phase 5: Code Compilation (Judge0 Integration)**
     *   Secure backend proxies directing runtime code payloads to Judge0 API sandboxes for compiling.
 *   [ ] **Phase 6: P2P Audio & Video Calls (PeerJS)**
