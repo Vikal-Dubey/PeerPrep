@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 
 const LANGUAGES = ["javascript", "python", "cpp", "java", "c"];
 
-const CodeEditor = ({ roomId, socket }) => {
-  const [code, setCode] = useState("// Start coding...\n");
-  const [language, setLanguage] = useState("javascript");
-  const isRemoteChange = useRef(false); // prevents echo loops
+const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) => {
+  const isRemoteChange = useRef(false);
 
-  // Listen for incoming updates from other participants
   useEffect(() => {
     const handleCodeUpdate = ({ code: newCode, language: newLang }) => {
       isRemoteChange.current = true;
@@ -16,7 +13,6 @@ const CodeEditor = ({ roomId, socket }) => {
       if (newLang) setLanguage(newLang);
     };
 
-    // NEW — handle initial state snapshot on join
     const handleRoomState = (state) => {
       if (state?.code !== undefined) {
         isRemoteChange.current = true;
@@ -27,16 +23,15 @@ const CodeEditor = ({ roomId, socket }) => {
 
     socket.on("code-update", handleCodeUpdate);
     socket.on("room-state", handleRoomState);
-    
+
     return () => {
-    socket.off("code-update", handleCodeUpdate);
-    socket.off("room-state", handleRoomState); // NEW
-  };
-  }, [socket]);
+      socket.off("code-update", handleCodeUpdate);
+      socket.off("room-state", handleRoomState);
+    };
+  }, [socket, setCode, setLanguage]);
 
   const handleEditorChange = (value) => {
     if (isRemoteChange.current) {
-      // This change came from a remote update being applied — don't re-broadcast it
       isRemoteChange.current = false;
       return;
     }
@@ -60,23 +55,17 @@ const CodeEditor = ({ roomId, socket }) => {
           className="bg-gray-700 text-white text-sm rounded px-2 py-1"
         >
           {LANGUAGES.map((lang) => (
-            <option key={lang} value={lang}>
-              {lang}
-            </option>
+            <option key={lang} value={lang}>{lang}</option>
           ))}
         </select>
       </div>
       <Editor
-        height="500px"
+        height="400px"
         language={language}
         value={code}
         onChange={handleEditorChange}
         theme="vs-dark"
-        options={{
-          fontSize: 14,
-          minimap: { enabled: false },
-          automaticLayout: true,
-        }}
+        options={{ fontSize: 14, minimap: { enabled: false }, automaticLayout: true }}
       />
     </div>
   );
