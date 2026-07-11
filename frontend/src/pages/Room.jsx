@@ -44,7 +44,7 @@ const Room = () => {
     socket.on("room-users", handleRoomUsers);
 
     // NEW — listen for server-side rejection
-  socket.on("room-error", () => setStatus("invalid"));
+    socket.on("room-error", () => setStatus("invalid"));
 
     return () => {
       socket.emit("leaveRoom", { roomId: code });

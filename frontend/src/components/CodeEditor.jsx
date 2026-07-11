@@ -16,8 +16,22 @@ const CodeEditor = ({ roomId, socket }) => {
       if (newLang) setLanguage(newLang);
     };
 
+    // NEW — handle initial state snapshot on join
+    const handleRoomState = (state) => {
+      if (state?.code !== undefined) {
+        isRemoteChange.current = true;
+        setCode(state.code);
+        if (state.language) setLanguage(state.language);
+      }
+    };
+
     socket.on("code-update", handleCodeUpdate);
-    return () => socket.off("code-update", handleCodeUpdate);
+    socket.on("room-state", handleRoomState);
+    
+    return () => {
+    socket.off("code-update", handleCodeUpdate);
+    socket.off("room-state", handleRoomState); // NEW
+  };
   }, [socket]);
 
   const handleEditorChange = (value) => {

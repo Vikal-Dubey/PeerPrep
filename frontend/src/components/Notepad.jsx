@@ -1,29 +1,36 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
 const Notepad = ({ roomId, socket }) => {
   const [content, setContent] = useState("");
-  const isRemoteChange = useRef(false);
 
   useEffect(() => {
     const handleTextUpdate = ({ content: newContent }) => {
-      isRemoteChange.current = true;
       setContent(newContent);
     };
 
+    const handleRoomState = (state) => {
+      if (state?.notes !== undefined) {
+        setContent(state.notes);
+      }
+    };
+
     socket.on("text-update", handleTextUpdate);
-    return () => socket.off("text-update", handleTextUpdate);
+    socket.on("room-state", handleRoomState);
+
+    return () => {
+      socket.off("text-update", handleTextUpdate);
+      socket.off("room-state", handleRoomState);
+    };
   }, [socket]);
 
-  const handleChange = (value) => {
-    if (isRemoteChange.current) {
-      isRemoteChange.current = false;
-      setContent(value);
-      return;
-    }
+  // Now reads all 4 args Quill provides — only broadcasts genuine user edits
+  const handleChange = (value, delta, source) => {
     setContent(value);
-    socket.emit("text-change", { roomId, content: value });
+    if (source === "user") {
+      socket.emit("text-change", { roomId, content: value });
+    }
   };
 
   return (

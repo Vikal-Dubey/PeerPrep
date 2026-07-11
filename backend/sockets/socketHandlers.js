@@ -1,7 +1,8 @@
 import { prisma } from "../db/prismaClient.js";
 
 // Tracks which users are in which room: { roomId: [{ socketId, username }] }
-const rooms = new Map();
+const rooms = new Map();  // roomId -> [{ socketId, username }]
+const roomState = new Map(); // roomId -> { code, language, notes }
 
 export const registerSocketHandlers = (io) => {
   io.on("connection", (socket) => {
@@ -35,10 +36,23 @@ export const registerSocketHandlers = (io) => {
 
       // Let others know someone joined
       socket.to(roomId).emit("user-joined", { socketId: socket.id, username });
+
+      // Send current room state to the newly joined socket only
+      const currentState = roomState.get(roomId);
+      if (currentState) {
+        socket.emit("room-state", currentState);
+      }
+
     });
 
     // Code editor sync
     socket.on("code-change", ({ roomId, code, language }) => {
+      // Persist latest state in memory
+      roomState.set(roomId, {
+        ...(roomState.get(roomId) || {}),
+        code,
+        language,
+      });
       socket.to(roomId).emit("code-update", { code, language });
     });
 
@@ -49,6 +63,11 @@ export const registerSocketHandlers = (io) => {
 
     // Notepad sync
     socket.on("text-change", ({ roomId, content }) => {
+      // Persist latest state in memory
+      roomState.set(roomId, {
+        ...(roomState.get(roomId) || {}),
+        notes: content,
+      });
       socket.to(roomId).emit("text-update", { content });
     });
 
@@ -78,6 +97,7 @@ function leaveRoom(socket, roomId, io) {
 
     if (roomUsers.length === 0) {
       rooms.delete(roomId);
+      roomState.delete(roomId); // Clean up state when room empties
     }
   }
 }
