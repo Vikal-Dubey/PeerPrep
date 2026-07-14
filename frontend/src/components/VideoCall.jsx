@@ -26,6 +26,7 @@ const VideoCall = ({ roomId, participants }) => {
     });
   };
 
+  
   // Effect 1 — acquire camera/mic, connect to PeerJS, answer incoming calls.
   // Runs once on mount.
   useEffect(() => {
