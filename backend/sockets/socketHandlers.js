@@ -1,21 +1,26 @@
 import { prisma } from "../db/prismaClient.js";
 
-// Tracks which users are in which room: { roomId: [{ socketId, username }] }
-const rooms = new Map();  // roomId -> [{ socketId, username }]
-const roomState = new Map(); // roomId -> { code, language, notes }
+// In-memory room state — fine for a single-server setup.
+// rooms: roomId -> [{ socketId, username, peerId }]
+// roomState: roomId -> { code, language, notes } (latest editor/notepad content)
+const rooms = new Map();
+const roomState = new Map();
 
 export const registerSocketHandlers = (io) => {
   io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.id}`);
 
-    socket.on("joinRoom", async ({ roomId, username }) => {
+    // A user joins a room. Also handles the case where their peerId was
+    // already registered via "update-peer-id" before this event arrived
+    // (the two events can race — this upserts either way).
+    socket.on("joinRoom", async ({ roomId, username, peerId }) => {
       const room = await prisma.room.findUnique({ where: { code: roomId } });
 
       if (!room || room.status !== "ACTIVE") {
         socket.emit("room-error", { message: "Room not found" });
         return;
       }
-      
+
       socket.join(roomId);
       socket.data.roomId = roomId;
       socket.data.username = username;
@@ -23,31 +28,30 @@ export const registerSocketHandlers = (io) => {
       if (!rooms.has(roomId)) rooms.set(roomId, []);
       const roomUsers = rooms.get(roomId);
 
-      // Avoid duplicate entries on reconnect
-      const alreadyIn = roomUsers.find((u) => u.socketId === socket.id);
-      if (!alreadyIn) {
-        roomUsers.push({ socketId: socket.id, username });
+      let userEntry = roomUsers.find((u) => u.socketId === socket.id);
+      if (!userEntry) {
+        userEntry = { socketId: socket.id, username, peerId };
+        roomUsers.push(userEntry);
+      } else {
+        userEntry.username = username;
+        if (peerId) userEntry.peerId = peerId;
       }
 
       console.log(`${username} (${socket.id}) joined room ${roomId}`);
 
-      // Notify everyone in the room of the updated participant list
       io.to(roomId).emit("room-users", roomUsers);
+      socket.to(roomId).emit("user-joined", { socketId: socket.id, username, peerId });
 
-      // Let others know someone joined
-      socket.to(roomId).emit("user-joined", { socketId: socket.id, username });
-
-      // Send current room state to the newly joined socket only
+      // Send the newly joined socket a snapshot of the room's current
+      // code/notes, so they don't see a blank editor if they joined late.
       const currentState = roomState.get(roomId);
       if (currentState) {
         socket.emit("room-state", currentState);
       }
-
     });
 
-    // Code editor sync
+    // Collaborative code editor sync
     socket.on("code-change", ({ roomId, code, language }) => {
-      // Persist latest state in memory
       roomState.set(roomId, {
         ...(roomState.get(roomId) || {}),
         code,
@@ -56,14 +60,13 @@ export const registerSocketHandlers = (io) => {
       socket.to(roomId).emit("code-update", { code, language });
     });
 
-    // Cursor/selection sync (optional but nice — shows where others are typing)
+    // Cursor/selection sync
     socket.on("cursor-change", ({ roomId, position, username }) => {
       socket.to(roomId).emit("cursor-update", { socketId: socket.id, position, username });
     });
 
     // Notepad sync
     socket.on("text-change", ({ roomId, content }) => {
-      // Persist latest state in memory
       roomState.set(roomId, {
         ...(roomState.get(roomId) || {}),
         notes: content,
@@ -71,16 +74,36 @@ export const registerSocketHandlers = (io) => {
       socket.to(roomId).emit("text-update", { content });
     });
 
-    socket.on("leaveRoom", ({ roomId }) => {
-      leaveRoom(socket, roomId, io);
+    // Registers/updates this socket's PeerJS id for video calls. May arrive
+    // before or after "joinRoom" — upserts either way to avoid a race.
+    socket.on("update-peer-id", ({ roomId, peerId }) => {
+      socket.data.peerId = peerId;
+
+      if (!rooms.has(roomId)) rooms.set(roomId, []);
+      const roomUsers = rooms.get(roomId);
+
+      let userEntry = roomUsers.find((u) => u.socketId === socket.id);
+      if (!userEntry) {
+        userEntry = { socketId: socket.id, username: socket.data.username || "Guest", peerId };
+        roomUsers.push(userEntry);
+      } else {
+        userEntry.peerId = peerId;
+      }
+
+      io.to(roomId).emit("room-users", roomUsers);
     });
 
+    // Code compiler (Judge0) — broadcast run status/output to everyone
     socket.on("run-code-start", ({ roomId }) => {
       socket.to(roomId).emit("code-running");
     });
 
     socket.on("code-output", ({ roomId, output }) => {
-      io.to(roomId).emit("output-update", output); // include sender too
+      io.to(roomId).emit("output-update", output);
+    });
+
+    socket.on("leaveRoom", ({ roomId }) => {
+      leaveRoom(socket, roomId, io);
     });
 
     socket.on("disconnect", () => {
@@ -93,6 +116,8 @@ export const registerSocketHandlers = (io) => {
   });
 };
 
+// Removes a socket from a room's participant list and cleans up room
+// state entirely once the room is empty.
 function leaveRoom(socket, roomId, io) {
   socket.leave(roomId);
 
@@ -105,7 +130,7 @@ function leaveRoom(socket, roomId, io) {
 
     if (roomUsers.length === 0) {
       rooms.delete(roomId);
-      roomState.delete(roomId); // Clean up state when room empties
+      roomState.delete(roomId);
     }
   }
 }
