@@ -4,6 +4,7 @@ import { DataContext } from "../context/DataContext";
 import CodeEditor from "../components/CodeEditor";
 import Notepad from "../components/Notepad";
 import Output from "../components/Output";
+import VideoCall from "../components/VideoCall";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -89,6 +90,10 @@ const Room = () => {
             {participants.map((p) => p.username).join(", ")}
           </span>
         </div>
+      </div>
+
+      <div className="mb-4">
+        <VideoCall roomId={roomCode} participants={participants} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
