@@ -2,7 +2,7 @@
 
 PeerPrep is a state-of-the-art, full-stack collaborative platform designed to revolutionize technical preparation and remote interviewing. It bridges the gap between candidates and interviewers by combining real-time synced document/code editing, peer-to-peer WebRTC video calls, sandbox code compilation, and Google's Gemini AI for ATS resume scoring and candidate evaluation scorecard generation.
 
-Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, **Phase 3 (Real-Time Sockets & Room Persistence)**, **Phase 4 (Collaborative Workspace)**, and **Phase 5 (Code Compilation)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, database-backed Room allocation, collaborative code/notepad editors, and secure code compilation proxies via Judge0.
+Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, **Phase 3 (Real-Time Sockets & Room Persistence)**, **Phase 4 (Collaborative Workspace)**, **Phase 5 (Code Compilation)**, and **Phase 6 (P2P Audio & Video Calls)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, database-backed Room allocation, collaborative code/notepad editors, secure code compilation proxies via Judge0, and WebRTC P2P media connections via PeerJS.
 
 
 ---
@@ -173,7 +173,7 @@ PeerPrep/
 │   ├── .env                      # Server configuration & environment variables
 │   ├── package.json              # Backend dependencies and scripts
 │   ├── prisma.config.ts          # Custom prisma execution options
-│   └── server.js                 # App configuration & middleware gateway
+│   └── server.js                 # App configuration & PeerJS server gateway
 │
 └── frontend/
     ├── public/                   # Static browser assets
@@ -182,7 +182,8 @@ PeerPrep/
     │   ├── components/
     │   │   ├── CodeEditor.jsx    # Collaborative Monaco code editor (multi-language)
     │   │   ├── Notepad.jsx       # Collaborative rich text editor using ReactQuill
-    │   │   └── Output.jsx        # Synced compilation outputs and execution trigger
+    │   │   ├── Output.jsx        # Synced compilation outputs and execution trigger
+    │   │   └── VideoCall.jsx     # WebRTC P2P 1-to-1 video/audio call panel
     │   ├── context/
     │   │   ├── DataContext.jsx   # Context hook definition
     │   │   └── DataProvider.jsx  # Wrapper for global state mapping
@@ -194,6 +195,7 @@ PeerPrep/
     │   │   └── Signup.jsx        # Registration panel interface
     │   ├── utils/
     │   │   ├── api.js            # Structured API query instance (fetch layer)
+    │   │   ├── peer.js           # Singleton configuration client for PeerJS
     │   │   └── socket.js         # Socket.io-client connection instance
     │   ├── App.css               # Global application styles
     │   ├── App.jsx               # Application navigation and routes
@@ -242,12 +244,17 @@ stateDiagram-v2
         [*] --> Judge0ProxyAPI
         Judge0ProxyAPI --> OutputConsoleSync
     }
+    state Phase6 {
+        [*] --> PeerJSSignaling
+        PeerJSSignaling --> WebRTCMediaStream
+    }
 
     style Phase1 fill:#10b981,color:#fff
     style Phase2 fill:#10b981,color:#fff
     style Phase3 fill:#10b981,color:#fff
     style Phase4 fill:#10b981,color:#fff
     style Phase5 fill:#10b981,color:#fff
+    style Phase6 fill:#10b981,color:#fff
 ```
 
 ### ✅ Completed Features
@@ -272,10 +279,14 @@ stateDiagram-v2
     *   Created a code-runner utility mapping frontend language selections to execution IDs via `languageMap.js`.
     *   Built the frontend **Output Console** component supporting execution triggers, progress flags, standard outputs, standard errors, and compile errors.
     *   Wired Socket.io hooks (`run-code-start` / `code-output`) to broadcast progress status and compile/runtime results to all room participants simultaneously.
+*   [x] **Phase 6: P2P Audio & Video Calls (PeerJS Integration)**
+    *   Configured an Express-based **PeerJS signaling server** in `backend/server.js` running on its own dedicated port to isolate WebRTC handshake tunnels.
+    *   Wired Socket.io events (`update-peer-id`) to link active users to their PeerJS signaling IDs and dynamic client lobby broadcasts.
+    *   Developed the frontend **Video Call Panel** component executing `navigator.mediaDevices.getUserMedia` for unblocked mic/cam capture.
+    *   Established connection negotiation filters to prevent simultaneous-call race states by matching user lexicographical IDs.
+    *   Implemented toggle selectors for muted audio tracks, paused camera feeds, and browser click-to-play autoplay unlocks.
 
 ### 🚀 Up Next
-*   [ ] **Phase 6: P2P Audio & Video Calls (PeerJS)**
-    *   Implement direct 1-to-1 WebRTC video feeds using PeerJS nodes.
 *   [ ] **Phase 7: AI Interviewer & Resume Analyzer (Gemini AI)**
     *   Build multer-based PDF extractors with `pdf-parse`. Feed contents to Gemini AI along with ATS compliance prompts and resume evaluators.
 *   [ ] **Phase 8: UI Styling & Deployment**
@@ -299,6 +310,7 @@ JWT_SECRET=your_super_secure_jwt_secret_key
 FRONTEND_URL=http://localhost:5173
 JUDGE0_API_HOST=your_judge0_api_rapidapi_host_url
 JUDGE0_API_KEY=your_judge0_api_rapidapi_key
+PEER_PORT=3001
 # Upcoming configurations
 GEMINI_API_KEY=your_gemini_api_token
 ```
