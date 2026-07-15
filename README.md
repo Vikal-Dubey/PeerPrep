@@ -2,7 +2,7 @@
 
 PeerPrep is a state-of-the-art, full-stack collaborative platform designed to revolutionize technical preparation and remote interviewing. It bridges the gap between candidates and interviewers by combining real-time synced document/code editing, peer-to-peer WebRTC video calls, sandbox code compilation, and Google's Gemini AI for ATS resume scoring and candidate evaluation scorecard generation.
 
-Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, **Phase 3 (Real-Time Sockets & Room Persistence)**, **Phase 4 (Collaborative Workspace)**, **Phase 5 (Code Compilation)**, and **Phase 6 (P2P Audio & Video Calls)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, database-backed Room allocation, collaborative code/notepad editors, secure code compilation proxies via Judge0, and WebRTC P2P media connections via PeerJS.
+Currently, the project has successfully completed **Phase 1 (Setup)**, **Phase 2 (Database & Authentication)**, **Phase 3 (Real-Time Sockets & Room Persistence)**, **Phase 4 (Collaborative Workspace)**, **Phase 5 (Code Compilation)**, **Phase 6 (P2P Audio & Video Calls)**, and **Phase 7 (AI Interviewer & Resume Analyzer)** utilizing a modern **PERN Stack** (PostgreSQL, Express, React, Node.js) with Prisma ORM, secure JWT-based session tracking, Socket.io workspace syncing, database-backed Room allocation, collaborative code/notepad editors, secure code compilation proxies via Judge0, WebRTC P2P media connections via PeerJS, and Gemini AI interview scorecards & ATS analyzers.
 
 
 ---
@@ -152,7 +152,9 @@ PeerPrep/
 ├── backend/
 │   ├── controllers/
 │   │   ├── authControllers.js    # Sign-up, login, and validation logic
+│   │   ├── aiControllers.js      # Gemini prompts for question generation & scorecard grading
 │   │   ├── compilerControllers.js# Proxies code execution payload to Judge0 API
+│   │   ├── resumeControllers.js  # PDF text parsing and resume ATS analyzer
 │   │   └── roomControllers.js    # Room creation, joining, and status logic
 │   ├── db/
 │   │   └── prismaClient.js       # Prisma Client wrapper initialization
@@ -163,11 +165,14 @@ PeerPrep/
 │   │   └── schema.prisma         # PostgreSQL models & database setup
 │   ├── routes/
 │   │   ├── authRoutes.js         # Express authentication routes
+│   │   ├── aiRoutes.js           # Express router mapping for Gemini AI prompt queries
 │   │   ├── compilerRoutes.js     # Express code compilation route proxy
+│   │   ├── resumeRoutes.js       # Express file upload handling for resume evaluation
 │   │   └── roomRoutes.js         # Express room management endpoints
 │   ├── sockets/
-│   │   └── socketHandlers.js     # Socket.io room, editor, and output handlers
+│   │   └── socketHandlers.js     # Socket.io room, editor, output, and AI handlers
 │   ├── utils/
+│   │   ├── gemini.js             # Initializes GoogleGenAI client using gemini-1.5-flash
 │   │   ├── generateRoomCode.js   # Generates human-friendly dash-separated codes
 │   │   └── languageMap.js        # Maps editor languages to Judge0 language IDs
 │   ├── .env                      # Server configuration & environment variables
@@ -180,6 +185,7 @@ PeerPrep/
     ├── src/
     │   ├── assets/               # Local icons and images
     │   ├── components/
+    │   │   ├── AIPanel.jsx       # Sidebar for resume parsing and candidate scorecards
     │   │   ├── CodeEditor.jsx    # Collaborative Monaco code editor (multi-language)
     │   │   ├── Notepad.jsx       # Collaborative rich text editor using ReactQuill
     │   │   ├── Output.jsx        # Synced compilation outputs and execution trigger
@@ -248,6 +254,10 @@ stateDiagram-v2
         [*] --> PeerJSSignaling
         PeerJSSignaling --> WebRTCMediaStream
     }
+    state Phase7 {
+        [*] --> GeminiGenAIClient
+        GeminiGenAIClient --> ResumeATSAnylyzer
+    }
 
     style Phase1 fill:#10b981,color:#fff
     style Phase2 fill:#10b981,color:#fff
@@ -255,6 +265,7 @@ stateDiagram-v2
     style Phase4 fill:#10b981,color:#fff
     style Phase5 fill:#10b981,color:#fff
     style Phase6 fill:#10b981,color:#fff
+    style Phase7 fill:#10b981,color:#fff
 ```
 
 ### ✅ Completed Features
@@ -285,10 +296,14 @@ stateDiagram-v2
     *   Developed the frontend **Video Call Panel** component executing `navigator.mediaDevices.getUserMedia` for unblocked mic/cam capture.
     *   Established connection negotiation filters to prevent simultaneous-call race states by matching user lexicographical IDs.
     *   Implemented toggle selectors for muted audio tracks, paused camera feeds, and browser click-to-play autoplay unlocks.
+*   [x] **Phase 7: AI Interviewer & Resume Analyzer (Gemini AI Integration)**
+    *   Integrated the **Google Gemini AI (gemini-1.5-flash)** SDK to generate targeted interview questions based on candidate roles.
+    *   Added backend endpoints (`POST /api/ai/generate-questions` and `POST /api/ai/evaluate-answer`) to evaluate candidate responses and outputs.
+    *   Configured multi-part **PDF resume parsing** via `multer` and `pdf-parse`, extracting plaintext fields to feed into Gemini compliance metrics.
+    *   Wired Socket.io hooks (`ai-questions` / `ai-evaluation`) to broadcast questions and structured evaluation cards to both room users.
+    *   Built the frontend **AIPanel** component allowing resume uploads, question generation triggers, input answering, and score displays.
 
 ### 🚀 Up Next
-*   [ ] **Phase 7: AI Interviewer & Resume Analyzer (Gemini AI)**
-    *   Build multer-based PDF extractors with `pdf-parse`. Feed contents to Gemini AI along with ATS compliance prompts and resume evaluators.
 *   [ ] **Phase 8: UI Styling & Deployment**
     *   Style layout with custom Tailwind grids. Set up environment properties and build configurations to deploy on Render, Railway, Vercel, or Netlify.
 
