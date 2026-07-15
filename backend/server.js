@@ -5,11 +5,14 @@ import dotenv from "dotenv";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { ExpressPeerServer } from "peer";
+import resumeRoutes from "./routes/resumeRoutes.js";
+
 
 import authRoutes from "./routes/authRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import compilerRoutes from "./routes/compilerRoutes.js";
 import { registerSocketHandlers } from "./sockets/socketHandlers.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 dotenv.config();
 
@@ -27,6 +30,9 @@ app.use(cookieParser());
 app.use("/api", authRoutes);
 app.use("/api", roomRoutes);
 app.use("/api", compilerRoutes);
+app.use("/api", resumeRoutes);
+app.use("/api", aiRoutes);
+
 
 registerSocketHandlers(io);
 
