@@ -5,6 +5,7 @@ import CodeEditor from "../components/CodeEditor";
 import Notepad from "../components/Notepad";
 import Output from "../components/Output";
 import VideoCall from "../components/VideoCall";
+import AIPanel from "../components/AIPanel";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -114,6 +115,7 @@ const Room = () => {
           />
         </div>
         <Notepad roomId={roomCode} socket={socket} />
+        <AIPanel socket={socket} roomId={roomCode} />
       </div>
     </div>
   );
