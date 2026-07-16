@@ -110,6 +110,10 @@ export const registerSocketHandlers = (io) => {
       socket.to(roomId).emit("ai-evaluation-update", { evaluation, question });
     });
 
+    socket.on("resume-analysis", ({ roomId, result, fileName }) => {
+      socket.to(roomId).emit("resume-analysis-update", { result, fileName });
+    });
+
     socket.on("leaveRoom", ({ roomId }) => {
       leaveRoom(socket, roomId, io);
     });
