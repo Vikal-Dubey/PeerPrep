@@ -30,54 +30,35 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
-      >
-        <h1 className="text-2xl font-bold mb-6 text-center">Welcome Back</h1>
+    <div className="flex items-center justify-center min-h-screen bg-bg">
+      <form onSubmit={handleSubmit} className="bg-surface border border-border p-8 rounded-lg w-full max-w-sm">
+        <h1 className="text-2xl font-display font-bold mb-6 text-center text-text">Welcome Back</h1>
 
         {error && (
-          <p className="bg-red-100 text-red-600 text-sm p-2 rounded mb-4">
-            {error}
-          </p>
+          <p className="bg-red-500/10 text-red-400 text-sm p-2 rounded mb-4">{error}</p>
         )}
 
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="w-full border rounded px-3 py-2 mb-3"
+          type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required
+          className="w-full bg-bg border border-border text-text rounded px-3 py-2 mb-3 focus:border-accent-cool outline-none"
         />
         <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          className="w-full border rounded px-3 py-2 mb-4"
+          type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required
+          className="w-full bg-bg border border-border text-text rounded px-3 py-2 mb-4 focus:border-accent-cool outline-none"
         />
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        <button type="submit" disabled={loading}
+          className="w-full bg-accent text-bg font-semibold py-2 rounded hover:opacity-90 disabled:opacity-50 transition-opacity"
         >
           {loading ? "Logging in..." : "Log In"}
         </button>
 
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-4 text-muted">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-600 hover:underline">
-            Sign up
-          </Link>
+          <Link to="/signup" className="text-accent-cool hover:underline">Sign up</Link>
         </p>
       </form>
-    </div>
+  </div>
   );
 };
 

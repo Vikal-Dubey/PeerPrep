@@ -30,15 +30,17 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-bg">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
+        className="bg-surface border border-border p-8 rounded-lg w-full max-w-sm"
       >
-        <h1 className="text-2xl font-bold mb-6 text-center">Create Account</h1>
+        <h1 className="text-2xl font-display font-bold mb-6 text-center text-text">
+          Create Account
+        </h1>
 
         {error && (
-          <p className="bg-red-100 text-red-600 text-sm p-2 rounded mb-4">
+          <p className="bg-red-500/10 text-red-400 text-sm px-3 py-2 rounded mb-4 border border-red-500/20">
             {error}
           </p>
         )}
@@ -50,7 +52,7 @@ const Signup = () => {
           value={form.username}
           onChange={handleChange}
           required
-          className="w-full border rounded px-3 py-2 mb-3"
+          className="w-full bg-bg border border-border text-text rounded px-3 py-2 mb-3 focus:border-accent-cool outline-none placeholder:text-muted"
         />
         <input
           type="email"
@@ -59,7 +61,7 @@ const Signup = () => {
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full border rounded px-3 py-2 mb-3"
+          className="w-full bg-bg border border-border text-text rounded px-3 py-2 mb-3 focus:border-accent-cool outline-none placeholder:text-muted"
         />
         <input
           type="password"
@@ -69,20 +71,20 @@ const Signup = () => {
           onChange={handleChange}
           required
           minLength={6}
-          className="w-full border rounded px-3 py-2 mb-4"
+          className="w-full bg-bg border border-border text-text rounded px-3 py-2 mb-4 focus:border-accent-cool outline-none placeholder:text-muted"
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="w-full bg-accent text-bg font-semibold py-2 rounded hover:opacity-90 disabled:opacity-50 transition-opacity"
         >
           {loading ? "Creating account..." : "Sign Up"}
         </button>
 
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-4 text-muted">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-accent-cool hover:underline">
             Log in
           </Link>
         </p>

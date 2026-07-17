@@ -46,20 +46,31 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 gap-8">
-      <h1 className="text-3xl font-bold text-blue-600">PeerPrep</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-bg gap-10">
+      <div className="text-center">
+        <h1 className="text-3xl font-display font-bold text-text">PeerPrep</h1>
+        <p className="text-muted text-sm font-mono mt-1">start or join a session</p>
+      </div>
 
       {error && (
-        <p className="bg-red-100 text-red-600 text-sm p-2 rounded">{error}</p>
+        <p className="bg-red-500/10 text-red-400 text-sm px-3 py-2 rounded border border-red-500/20">
+          {error}
+        </p>
       )}
 
       <button
         onClick={handleCreate}
         disabled={creating}
-        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        className="bg-accent text-bg font-semibold px-8 py-3 rounded-lg hover:opacity-90 disabled:opacity-50 transition-opacity"
       >
         {creating ? "Creating..." : "Create Meeting"}
       </button>
+
+      <div className="flex items-center gap-3 text-muted text-xs font-mono w-64">
+        <div className="flex-1 h-px bg-border" />
+        or
+        <div className="flex-1 h-px bg-border" />
+      </div>
 
       <form onSubmit={handleJoin} className="flex gap-2">
         <input
@@ -67,13 +78,13 @@ const Dashboard = () => {
           placeholder="Enter room code"
           value={joinCode}
           onChange={(e) => setJoinCode(e.target.value)}
-          className="border rounded px-3 py-2"
+          className="bg-surface border border-border text-text font-mono text-sm rounded-md px-3 py-2 focus:border-accent-cool outline-none w-48"
         />
         <button
           type="submit"
-          className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900"
+          className="bg-surface border border-border text-text px-4 py-2 rounded-md hover:border-accent-cool transition-colors"
         >
-          Join Meeting
+          Join
         </button>
       </form>
     </div>
