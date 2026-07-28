@@ -1,11 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import Editor from "@monaco-editor/react";
+import { DataContext } from "../context/DataContext";
 
 const LANGUAGES = ["javascript", "python", "cpp", "java", "c"];
 
 const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) => {
+  const { user } = useContext(DataContext);
   const isRemoteChange = useRef(false);
+  const editorRef = useRef(null);
+  const monacoRef = useRef(null);
+  const decorationsRef = useRef({});
 
+  // Listen to remote changes for code & language
   useEffect(() => {
     const handleCodeUpdate = ({ code: newCode, language: newLang }) => {
       isRemoteChange.current = true;
@@ -30,6 +36,52 @@ const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) =>
     };
   }, [socket, setCode, setLanguage]);
 
+  // Listen for cursor changes from other participants
+  useEffect(() => {
+    const handleCursorUpdate = ({ socketId, position, username }) => {
+      if (!editorRef.current || !monacoRef.current) return;
+
+      const editor = editorRef.current;
+      const monaco = monacoRef.current;
+
+      const oldDecorations = decorationsRef.current[socketId] || [];
+
+      const newDecorations = position
+        ? editor.deltaDecorations(oldDecorations, [
+            {
+              range: new monaco.Range(
+                position.lineNumber,
+                position.column,
+                position.lineNumber,
+                position.column
+              ),
+              options: {
+                className: "remote-cursor-line",
+                hoverMessage: { value: `${username} is here` },
+              },
+            },
+          ])
+        : editor.deltaDecorations(oldDecorations, []);
+
+      decorationsRef.current[socketId] = newDecorations;
+    };
+
+    const handleUserLeft = ({ socketId }) => {
+      if (editorRef.current && decorationsRef.current[socketId]) {
+        editorRef.current.deltaDecorations(decorationsRef.current[socketId], []);
+        delete decorationsRef.current[socketId];
+      }
+    };
+
+    socket.on("cursor-update", handleCursorUpdate);
+    socket.on("user-left", handleUserLeft);
+
+    return () => {
+      socket.off("cursor-update", handleCursorUpdate);
+      socket.off("user-left", handleUserLeft);
+    };
+  }, [socket]);
+
   const handleEditorChange = (value) => {
     if (isRemoteChange.current) {
       isRemoteChange.current = false;
@@ -45,28 +97,59 @@ const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) =>
     socket.emit("code-change", { roomId, code, language: newLang });
   };
 
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+    monacoRef.current = monaco;
+
+    // Track cursor changes and emit to socket
+    editor.onDidChangeCursorPosition((e) => {
+      const position = e.position;
+      const username = user?.username || "Guest";
+      socket.emit("cursor-change", { roomId, position, username });
+    });
+  };
+
   return (
-    <div className="flex flex-col h-full border rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between bg-gray-800 px-3 py-2">
-        <span className="text-white text-sm font-medium">Code Editor</span>
+    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg">
+      <div className="flex items-center justify-between bg-surface px-4 py-3 border-b border-border">
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-text text-sm font-semibold tracking-wide">Collaborative Code Editor</span>
+        </div>
         <select
           value={language}
           onChange={handleLanguageChange}
-          className="bg-gray-700 text-white text-sm rounded px-2 py-1"
+          className="bg-bg border border-border text-text text-xs rounded-md px-3 py-1.5 outline-none focus:border-accent-cool transition-all cursor-pointer font-mono font-medium"
         >
           {LANGUAGES.map((lang) => (
-            <option key={lang} value={lang}>{lang}</option>
+            <option key={lang} value={lang}>{lang.toUpperCase()}</option>
           ))}
         </select>
       </div>
-      <Editor
-        height="400px"
-        language={language}
-        value={code}
-        onChange={handleEditorChange}
-        theme="vs-dark"
-        options={{ fontSize: 14, minimap: { enabled: false }, automaticLayout: true }}
-      />
+      <div className="flex-1 bg-[#1e1e1e] p-1">
+        <Editor
+          height="450px"
+          language={language}
+          value={code}
+          onChange={handleEditorChange}
+          onMount={handleEditorDidMount}
+          theme="vs-dark"
+          options={{
+            fontSize: 14,
+            fontFamily: "'JetBrains Mono', monospace",
+            minimap: { enabled: false },
+            automaticLayout: true,
+            scrollbar: {
+              vertical: "visible",
+              horizontal: "visible",
+            },
+            cursorBlinking: "smooth",
+            cursorSmoothCaretAnimation: "on",
+            renderWhitespace: "selection",
+            guides: { indentation: true },
+          }}
+        />
+      </div>
     </div>
   );
 };

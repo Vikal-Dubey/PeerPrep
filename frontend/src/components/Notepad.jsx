@@ -25,7 +25,6 @@ const Notepad = ({ roomId, socket }) => {
     };
   }, [socket]);
 
-  // Now reads all 4 args Quill provides — only broadcasts genuine user edits
   const handleChange = (value, delta, source) => {
     setContent(value);
     if (source === "user") {
@@ -34,17 +33,20 @@ const Notepad = ({ roomId, socket }) => {
   };
 
   return (
-    <div className="flex flex-col h-full border rounded-lg overflow-hidden bg-white">
-      <div className="bg-gray-800 px-3 py-2">
-        <span className="text-white text-sm font-medium">Shared Notes</span>
+    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text">
+      <div className="bg-surface px-4 py-3 border-b border-border flex items-center gap-2">
+        <span className="w-3 h-3 rounded-full bg-amber-500 animate-pulse" />
+        <span className="text-text text-sm font-semibold tracking-wide">Shared Notepad</span>
       </div>
-      <ReactQuill
-        theme="snow"
-        value={content}
-        onChange={handleChange}
-        className="flex-1"
-        style={{ height: "400px" }}
-      />
+      <div className="flex-1 p-2 bg-surface">
+        <ReactQuill
+          theme="snow"
+          value={content}
+          onChange={handleChange}
+          className="flex-1"
+          placeholder="Jot down notes, test cases, or ideas here..."
+        />
+      </div>
     </div>
   );
 };

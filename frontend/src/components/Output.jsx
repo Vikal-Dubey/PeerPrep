@@ -37,50 +37,87 @@ const Output = ({ roomId, socket, code, language }) => {
 
       setOutput(result);
       setRunning(false);
-      socket.emit("code-output", { roomId, output: result }); // broadcast to both
+      socket.emit("code-output", { roomId, output: result }); // broadcast to peer
     } catch (err) {
-        console.error(err);
-        setRunning(false);
-        setOutput({ stderr: "Failed to reach compiler service." });
+      console.error(err);
+      setRunning(false);
+      const errOutput = { stderr: "Failed to connect to the Judge0 compiler service." };
+      setOutput(errOutput);
+      socket.emit("code-output", { roomId, output: errOutput });
     }
   };
 
   return (
-    <div className="flex flex-col h-full border rounded-lg overflow-hidden bg-white">
-      <div className="flex items-center justify-between bg-gray-800 px-3 py-2">
-        <span className="text-white text-sm font-medium">Output</span>
+    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text">
+      <div className="flex items-center justify-between bg-surface px-4 py-3 border-b border-border">
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-accent-cool animate-pulse" />
+          <span className="text-text text-sm font-semibold tracking-wide">Execution Output</span>
+        </div>
         <button
           onClick={handleRun}
           disabled={running}
-          className="bg-green-600 text-white text-sm px-3 py-1 rounded hover:bg-green-700 disabled:opacity-50"
+          className="bg-emerald-600 hover:bg-emerald-500 text-bg text-xs font-bold px-4 py-2 rounded-md active:scale-95 transition-all disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1.5"
         >
-          {running ? "Running..." : "Run"}
+          {running ? (
+            <>
+              <span className="w-3 h-3 border-2 border-bg border-t-transparent rounded-full animate-spin" />
+              Running...
+            </>
+          ) : (
+            <>
+              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              Run Code
+            </>
+          )}
         </button>
       </div>
 
-      <div className="p-3 font-mono text-sm whitespace-pre-wrap overflow-auto flex-1 bg-gray-900 text-gray-100">
-        {running && <p className="text-yellow-400">Running code...</p>}
+      <div className="p-4 font-mono text-sm whitespace-pre-wrap overflow-auto h-48 bg-bg text-text/90 flex flex-col justify-between">
+        <div className="flex-1">
+          {running && (
+            <div className="flex items-center gap-2 text-amber-400">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+              Compiling and executing code...
+            </div>
+          )}
 
-        {!running && output && (
-          <>
-            {output.compile_output && (
-              <p className="text-red-400">Compile Error:{"\n"}{output.compile_output}</p>
-            )}
-            {output.stderr && (
-              <p className="text-red-400">stderr:{"\n"}{output.stderr}</p>
-            )}
-            {output.stdout && (
-              <p className="text-green-400">{output.stdout}</p>
-            )}
-            {!output.stdout && !output.stderr && !output.compile_output && (
-              <p className="text-gray-400">No output.</p>
-            )}
-            <p className="text-gray-500 text-xs mt-2">Status: {output.status}</p>
-          </>
-        )}
+          {!running && output && (
+            <div className="space-y-2">
+              {output.compile_output && (
+                <div className="text-rose-400 bg-rose-500/5 border border-rose-500/20 p-2.5 rounded-md font-mono text-xs">
+                  <div className="font-bold uppercase text-[10px] tracking-wider mb-1">Compilation Error:</div>
+                  {output.compile_output}
+                </div>
+              )}
+              {output.stderr && (
+                <div className="text-rose-400 bg-rose-500/5 border border-rose-500/20 p-2.5 rounded-md font-mono text-xs">
+                  <div className="font-bold uppercase text-[10px] tracking-wider mb-1">Runtime Error (stderr):</div>
+                  {output.stderr}
+                </div>
+              )}
+              {output.stdout && (
+                <div className="text-emerald-400 bg-emerald-500/5 border border-emerald-500/20 p-3 rounded-md font-mono">
+                  {output.stdout}
+                </div>
+              )}
+              {!output.stdout && !output.stderr && !output.compile_output && (
+                <p className="text-muted italic">Program executed successfully with no output.</p>
+              )}
+            </div>
+          )}
 
-        {!running && !output && (
-          <p className="text-gray-500">Click "Run" to execute the code.</p>
+          {!running && !output && (
+            <p className="text-muted/50 italic">Click "Run Code" above to execute your solution.</p>
+          )}
+        </div>
+
+        {output && !running && (
+          <div className="text-muted/40 text-[10px] font-mono text-right border-t border-border/30 pt-2 mt-4 uppercase tracking-wider">
+            Status: {output.status}
+          </div>
         )}
       </div>
     </div>
