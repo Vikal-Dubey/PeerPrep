@@ -2,6 +2,17 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../db/prismaClient.js";
 
+// Helper to resolve CORS cookies in production cross-origin deployments
+const getCookieOptions = () => {
+  const isProd = process.env.NODE_ENV === "production" || 
+                 (process.env.FRONTEND_URL && process.env.FRONTEND_URL.startsWith("https"));
+  return {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "strict",
+  };
+};
+
 // REGISTER
 export const registerUser = async (req, res) => {
   try {
@@ -22,11 +33,7 @@ export const registerUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // HTTPS only in prod
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-    });
+    res.cookie("token", token, getCookieOptions());
     res.status(201).json({
       user: { id: newUser.id, username: newUser.username, email: newUser.email },
     });
@@ -54,11 +61,7 @@ export const loginUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // HTTPS only in prod
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-    });
+    res.cookie("token", token, getCookieOptions());
     res.status(200).json({
       user: { id: user.id, username: user.username, email: user.email },
     });
@@ -86,10 +89,10 @@ export const getMe = async (req, res) => {
 }
 
 export const logoutUser = (req, res) => {
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // HTTPS only in prod
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  const options = getCookieOptions();
+  res.cookie("token", "", {
+    ...options,
+    expires: new Date(0), // clear cookie immediately
   });
   res.status(200).json({ message: "Logged out successfully" });
 };
