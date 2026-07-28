@@ -9,6 +9,9 @@ export const registerUser = async (data) => {
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || "Registration failed");
+  if (result.token) {
+    localStorage.setItem("token", result.token);
+  }
   return result;
 };
 
@@ -21,6 +24,9 @@ export const loginUser = async (data) => {
   });
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || "Login failed");
+  if (result.token) {
+    localStorage.setItem("token", result.token);
+  }
   return result;
 };
 
@@ -40,6 +46,9 @@ export const logoutUser = async () => {
   const res = await fetch(`${API_URL}/api/logout`, {
     method: "POST",
     credentials: "include",
-  })
+  });
+  if (res.ok) {
+    localStorage.removeItem("token");
+  }
   return res.ok;
 };

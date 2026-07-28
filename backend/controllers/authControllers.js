@@ -35,6 +35,7 @@ export const registerUser = async (req, res) => {
 
     res.cookie("token", token, getCookieOptions(req));
     res.status(201).json({
+      token,
       user: { id: newUser.id, username: newUser.username, email: newUser.email },
     });
   } catch (err) {
@@ -63,6 +64,7 @@ export const loginUser = async (req, res) => {
 
     res.cookie("token", token, getCookieOptions(req));
     res.status(200).json({
+      token,
       user: { id: user.id, username: user.username, email: user.email },
     });
   } catch (err) {
