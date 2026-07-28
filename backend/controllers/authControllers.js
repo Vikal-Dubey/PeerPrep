@@ -22,9 +22,10 @@ export const registerUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, { 
-        httpOnly: true,
-        sameSite: "strict"
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
     res.status(201).json({
       user: { id: newUser.id, username: newUser.username, email: newUser.email },
@@ -53,9 +54,10 @@ export const loginUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, { 
-        httpOnly: true,
-        sameSite: "strict"
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
     res.status(200).json({
       user: { id: user.id, username: user.username, email: user.email },
@@ -84,6 +86,10 @@ export const getMe = async (req, res) => {
 }
 
 export const logoutUser = (req, res) => {
-  res.clearCookie("token", { httpOnly: true, sameSite: "strict" });
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  });
   res.status(200).json({ message: "Logged out successfully" });
 };
