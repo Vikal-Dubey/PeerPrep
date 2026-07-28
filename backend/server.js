@@ -51,13 +51,6 @@ registerSocketHandlers(io);
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-// --- PeerJS on its own separate server, not sharing `server` above ---
-const peerApp = express();
-const peerHttpServer = createServer(peerApp);
-const peerServer = ExpressPeerServer(peerHttpServer, { path: "/peerjs" });
-peerApp.use("/peer", peerServer);
-
-const PEER_PORT = process.env.PEER_PORT || 3001;
-peerHttpServer.listen(PEER_PORT, () =>
-  console.log(`PeerJS signaling server running on port ${PEER_PORT}`)
-);
+// --- PeerJS signaling server integrated into the main Express server ---
+const peerServer = ExpressPeerServer(server, { path: "/peerjs" });
+app.use("/peer", peerServer);
