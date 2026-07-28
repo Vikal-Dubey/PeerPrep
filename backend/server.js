@@ -19,10 +19,14 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
+const rawFrontendUrl = process.env.FRONTEND_URL || "";
+const frontendUrlNormalized = rawFrontendUrl.replace(/\/$/, "");
+
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL,
-];
+  frontendUrlNormalized,
+  `${frontendUrlNormalized}/`
+].filter(Boolean);
 
 const io = new Server(server, {
   cors: { origin: allowedOrigins, credentials: true },
