@@ -3,13 +3,13 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../db/prismaClient.js";
 
 // Helper to resolve CORS cookies in production cross-origin deployments
-const getCookieOptions = () => {
-  const isProd = process.env.NODE_ENV === "production" || 
-                 (process.env.FRONTEND_URL && process.env.FRONTEND_URL.startsWith("https"));
+const getCookieOptions = (req) => {
+  const host = req.headers.host || "";
+  const isLocal = host.includes("localhost") || host.includes("127.0.0.1");
   return {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? "none" : "strict",
+    secure: !isLocal,
+    sameSite: !isLocal ? "none" : "lax",
   };
 };
 
@@ -33,7 +33,7 @@ export const registerUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, getCookieOptions());
+    res.cookie("token", token, getCookieOptions(req));
     res.status(201).json({
       user: { id: newUser.id, username: newUser.username, email: newUser.email },
     });
@@ -61,7 +61,7 @@ export const loginUser = async (req, res) => {
       expiresIn: "7d",
     });
 
-    res.cookie("token", token, getCookieOptions());
+    res.cookie("token", token, getCookieOptions(req));
     res.status(200).json({
       user: { id: user.id, username: user.username, email: user.email },
     });
@@ -89,7 +89,7 @@ export const getMe = async (req, res) => {
 }
 
 export const logoutUser = (req, res) => {
-  const options = getCookieOptions();
+  const options = getCookieOptions(req);
   res.cookie("token", "", {
     ...options,
     expires: new Date(0), // clear cookie immediately
