@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [creating, setCreating] = useState(false);
   const navigate = useNavigate();
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
   const handleCreate = async () => {
     setCreating(true);

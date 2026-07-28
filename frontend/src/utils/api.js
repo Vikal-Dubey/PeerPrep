@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 export const registerUser = async (data) => {
   const res = await fetch(`${API_URL}/api/register`, {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaCopy, FaCheck } from "react-icons/fa";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 const AIPanel = ({ socket, roomId }) => {
   const [role, setRole] = useState("Frontend Developer");

@@ -9,7 +9,7 @@ import AIPanel from "../components/AIPanel";
 import ResumeUpload from "../components/ResumeUpload";
 import { FaCopy, FaCheck, FaSignOutAlt, FaBook, FaRobot, FaFileAlt } from "react-icons/fa";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 const Room = () => {
   const { roomId: roomCode } = useParams();
