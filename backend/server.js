@@ -59,4 +59,4 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // --- PeerJS signaling server integrated into the main Express server ---
 const peerServer = ExpressPeerServer(server, { path: "/peerjs" });
-app.use("/peer", peerServer);
+app.use(peerServer);

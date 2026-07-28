@@ -26,7 +26,7 @@ const peer = new Peer(undefined, {
   host: peerHost,
   port: peerPort,
   secure: peerSecure,
-  path: "/peer/peerjs",
+  path: "/peerjs",
 });
 
 export default peer;
