@@ -87,12 +87,14 @@ const Dashboard = () => {
       </header>
 
       {/* Main content grid */}
-      <main className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-2xl flex flex-col gap-8 items-center">
-          <div className="text-center space-y-2 max-w-md animate-fadeIn">
-            <h1 className="text-3xl font-extrabold tracking-tight">Welcome to PeerPrep workspace</h1>
-            <p className="text-muted text-sm leading-relaxed">
-              Create an instant interview room, share the room code with your peer, and start coding collaboratively with integrated video call and AI evaluation.
+      <main className="flex-1 flex flex-col items-center p-6 gap-16 max-w-4xl mx-auto w-full">
+        <div className="w-full flex flex-col gap-8 items-center mt-6">
+          <div className="text-center space-y-3 max-w-lg animate-fadeIn">
+            <h1 className="text-4xl font-black tracking-tight bg-gradient-to-r from-text via-text-light to-muted bg-clip-text text-transparent">
+              Ace Your Interviews with Confidence
+            </h1>
+            <p className="text-muted text-sm leading-relaxed max-w-md mx-auto">
+              Practice with real-time video, a collaborative code editor, and AI-powered feedback — all in one room.
             </p>
           </div>
 
@@ -123,7 +125,7 @@ const Dashboard = () => {
                 ) : (
                   <>
                     <FaPlus className="w-3 h-3" />
-                    Create Meeting
+                    Start an Interview
                   </>
                 )}
               </button>
@@ -133,7 +135,7 @@ const Dashboard = () => {
             <div className="bg-surface border border-border rounded-xl p-6 flex flex-col justify-between items-start gap-4 hover:border-accent-cool/40 hover:shadow-lg hover:shadow-accent-cool/5 transition-all group">
               <div className="space-y-1">
                 <h3 className="font-bold text-lg text-text">Join Session</h3>
-                <p className="text-xs text-muted leading-relaxed">Enter a unique session code shared by your peer.</p>
+                <p className="text-xs text-muted leading-relaxed">Enter a room code shared by your peer.</p>
               </div>
               <form onSubmit={handleJoin} className="w-full flex flex-col gap-2">
                 <input
@@ -149,13 +151,143 @@ const Dashboard = () => {
                   className="w-full bg-surface hover:bg-accent-cool hover:text-white border border-border hover:border-accent-cool text-text font-extrabold text-sm py-2.5 rounded-lg active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <FaDoorOpen className="w-3.5 h-3.5" />
-                  Join Room
+                  Join an Interview
                 </button>
               </form>
             </div>
           </div>
+
+          {/* Our Features Section */}
+          <section className="w-full border-t border-border/40 pt-12 mt-6 animate-fadeIn">
+            <h2 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-text to-muted bg-clip-text text-transparent">
+              Our Features
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Feature 1 */}
+              <div className="bg-surface border border-border/60 rounded-xl p-5 flex flex-col gap-3 hover:border-accent/40 transition-all hover:translate-y-[-2px]">
+                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent text-lg">
+                  🎥
+                </div>
+                <h4 className="font-bold text-sm text-text">Audio and Video Calls</h4>
+                <p className="text-xs text-muted leading-relaxed">
+                  Communicate seamlessly with crystal-clear audio and video.
+                </p>
+              </div>
+
+              {/* Feature 2 */}
+              <div className="bg-surface border border-border/60 rounded-xl p-5 flex flex-col gap-3 hover:border-accent/40 transition-all hover:translate-y-[-2px]">
+                <div className="w-10 h-10 rounded-lg bg-accent-cool/10 flex items-center justify-center text-accent-cool text-lg">
+                  💻
+                </div>
+                <h4 className="font-bold text-sm text-text">Collaborative Code Editor</h4>
+                <p className="text-xs text-muted leading-relaxed">
+                  Code together in real-time with syntax highlighting and autocompletion.
+                </p>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="bg-surface border border-border/60 rounded-xl p-5 flex flex-col gap-3 hover:border-accent/40 transition-all hover:translate-y-[-2px]">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 text-lg">
+                  📝
+                </div>
+                <h4 className="font-bold text-sm text-text">Text Editor</h4>
+                <p className="text-xs text-muted leading-relaxed">
+                  Take notes and plan your solutions with our integrated text editor.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* How It Works Section */}
+          <section className="w-full border-t border-border/40 pt-12 mt-6 animate-fadeIn">
+            <h2 className="text-2xl font-bold text-center mb-10 bg-gradient-to-r from-text to-muted bg-clip-text text-transparent">
+              How it works
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Step 1 */}
+              <div className="flex flex-col items-center text-center gap-3 group">
+                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-black text-sm text-accent group-hover:bg-accent group-hover:text-bg transition-all">
+                  1
+                </div>
+                <h4 className="font-bold text-sm text-text">Sign Up</h4>
+                <p className="text-xs text-muted max-w-[200px] leading-relaxed">
+                  Create an account to get started.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex flex-col items-center text-center gap-3 group">
+                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-black text-sm text-accent-cool group-hover:bg-accent-cool group-hover:text-bg transition-all">
+                  2
+                </div>
+                <h4 className="font-bold text-sm text-text">Create or Join</h4>
+                <p className="text-xs text-muted max-w-[200px] leading-relaxed">
+                  Start or join an interview session.
+                </p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex flex-col items-center text-center gap-3 group">
+                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-black text-sm text-purple-400 group-hover:bg-purple-400 group-hover:text-bg transition-all">
+                  3
+                </div>
+                <h4 className="font-bold text-sm text-text">Practice</h4>
+                <p className="text-xs text-muted max-w-[200px] leading-relaxed">
+                  Use our tools to sharpen your interview skills.
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
+
+      {/* Footer Section */}
+      <footer className="bg-surface border-t border-border mt-auto px-6 py-8 text-[11px] text-muted font-mono w-full">
+        <div className="max-w-4xl mx-auto w-full flex flex-col md:flex-row justify-between gap-8">
+          <div className="space-y-2">
+            <span className="text-sm font-bold text-text bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent">
+              PeerPrep
+            </span>
+            <p className="max-w-[240px] leading-relaxed text-[10px]">
+              An agent-first ecosystem designed for peer technical interviews and real-time collaboration.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
+            <div className="flex flex-col gap-2">
+              <span className="font-bold text-text text-[9px] uppercase tracking-wider">Quick Links</span>
+              <a href="https://peer-prep-six.vercel.app/#privacy" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Privacy Policy</a>
+              <a href="https://peer-prep-six.vercel.app/#terms" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Terms of Service</a>
+              <a href="https://peer-prep-six.vercel.app/#contact" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Contact Us</a>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <span className="font-bold text-text text-[9px] uppercase tracking-wider">Follow Us</span>
+              <a href="#" className="hover:text-accent transition-colors">LinkedIn</a>
+              <a href="#" className="hover:text-accent transition-colors">Twitter</a>
+              <a href="#" className="hover:text-accent transition-colors">GitHub</a>
+            </div>
+
+            <div className="flex flex-col gap-2 col-span-2 sm:col-span-1">
+              <span className="font-bold text-text text-[9px] uppercase tracking-wider">Contact Us</span>
+              <span className="text-[10px] text-muted select-all">Email: info@peerprep.com</span>
+              <span className="text-[10px] text-muted">Phone: +123 456 7890</span>
+              <span className="text-[10px] text-muted">Address: 123 Main Street, City, Country</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto w-full border-t border-border/40 pt-4 mt-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] text-muted/60">
+          <span>&copy; 2026 PeerPrep. All rights reserved.</span>
+          <div className="flex gap-4">
+            <a href="#" className="hover:underline">Documentation</a>
+            <a href="#" className="hover:underline">GitHub</a>
+            <a href="#" className="hover:underline">Support</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

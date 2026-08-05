@@ -60,6 +60,15 @@ export const registerSocketHandlers = (io) => {
       socket.to(roomId).emit("code-update", { code, language });
     });
 
+    // Collaborative test case input sync
+    socket.on("custom-input-change", ({ roomId, input }) => {
+      roomState.set(roomId, {
+        ...(roomState.get(roomId) || {}),
+        input,
+      });
+      socket.to(roomId).emit("custom-input-update", { input });
+    });
+
     // Cursor/selection sync
     socket.on("cursor-change", ({ roomId, position, username }) => {
       socket.to(roomId).emit("cursor-update", { socketId: socket.id, position, username });
