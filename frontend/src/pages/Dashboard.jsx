@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import { logoutUser } from "../utils/api";
-import { FaPlus, FaSignOutAlt, FaDoorOpen, FaUserCircle } from "react-icons/fa";
+import { FaPlus, FaSignOutAlt, FaDoorOpen, FaUserCircle, FaLinkedin, FaGithub } from "react-icons/fa";
 
 const Dashboard = () => {
   const { user, setUser } = useContext(DataContext);
@@ -204,37 +204,36 @@ const Dashboard = () => {
             <h2 className="text-2xl font-bold text-center mb-10 bg-gradient-to-r from-text to-muted bg-clip-text text-transparent">
               How it works
             </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Step 1 */}
-              <div className="flex flex-col items-center text-center gap-3 group">
-                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-black text-sm text-accent group-hover:bg-accent group-hover:text-bg transition-all">
+              <div className="flex flex-col items-center text-center p-6 bg-surface/40 border border-border/40 rounded-xl gap-3.5 group hover:border-accent/40 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-accent/5 cursor-pointer animate-fadeIn">
+                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent group-hover:bg-accent group-hover:text-bg group-hover:scale-110 transition-all duration-300">
                   1
                 </div>
-                <h4 className="font-bold text-sm text-text">Sign Up</h4>
-                <p className="text-xs text-muted max-w-[200px] leading-relaxed">
+                <h4 className="font-bold text-base text-text font-mono">Sign Up</h4>
+                <p className="text-sm text-muted/80 max-w-[200px] leading-relaxed font-mono">
                   Create an account to get started.
                 </p>
               </div>
 
               {/* Step 2 */}
-              <div className="flex flex-col items-center text-center gap-3 group">
-                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-black text-sm text-accent-cool group-hover:bg-accent-cool group-hover:text-bg transition-all">
+              <div className="flex flex-col items-center text-center p-6 bg-surface/40 border border-border/40 rounded-xl gap-3.5 group hover:border-accent-cool/40 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-accent-cool/5 cursor-pointer animate-fadeIn">
+                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent-cool group-hover:bg-accent-cool group-hover:text-bg group-hover:scale-110 transition-all duration-300">
                   2
                 </div>
-                <h4 className="font-bold text-sm text-text">Create or Join</h4>
-                <p className="text-xs text-muted max-w-[200px] leading-relaxed">
+                <h4 className="font-bold text-base text-text font-mono">Create or Join</h4>
+                <p className="text-sm text-muted/80 max-w-[200px] leading-relaxed font-mono">
                   Start or join an interview session.
                 </p>
               </div>
 
               {/* Step 3 */}
-              <div className="flex flex-col items-center text-center gap-3 group">
-                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-black text-sm text-purple-400 group-hover:bg-purple-400 group-hover:text-bg transition-all">
+              <div className="flex flex-col items-center text-center p-6 bg-surface/40 border border-border/40 rounded-xl gap-3.5 group hover:border-purple-500/40 hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-purple-500/5 cursor-pointer animate-fadeIn">
+                <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-purple-400 group-hover:bg-purple-400 group-hover:text-bg group-hover:scale-110 transition-all duration-300">
                   3
                 </div>
-                <h4 className="font-bold text-sm text-text">Practice</h4>
-                <p className="text-xs text-muted max-w-[200px] leading-relaxed">
+                <h4 className="font-bold text-base text-text font-mono">Practice</h4>
+                <p className="text-sm text-muted/80 max-w-[200px] leading-relaxed font-mono">
                   Use our tools to sharpen your interview skills.
                 </p>
               </div>
@@ -244,48 +243,49 @@ const Dashboard = () => {
       </main>
 
       {/* Footer Section */}
-      <footer className="bg-surface border-t border-border mt-auto px-6 py-8 text-[11px] text-muted font-mono w-full">
-        <div className="max-w-4xl mx-auto w-full flex flex-col md:flex-row justify-between gap-8">
+      <footer className="bg-surface border-t border-border mt-auto px-6 py-10 text-sm text-muted font-mono w-full">
+        <div className="max-w-4xl mx-auto w-full flex flex-col md:flex-row justify-between gap-10">
           <div className="space-y-2">
-            <span className="text-sm font-bold text-text bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent">
+            <span className="text-lg font-bold text-text bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent">
               PeerPrep
             </span>
-            <p className="max-w-[240px] leading-relaxed text-[10px]">
+            <p className="max-w-[280px] leading-relaxed text-sm text-muted/80">
               An agent-first ecosystem designed for peer technical interviews and real-time collaboration.
             </p>
           </div>
           
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-            <div className="flex flex-col gap-2">
-              <span className="font-bold text-text text-[9px] uppercase tracking-wider">Quick Links</span>
-              <a href="https://peer-prep-six.vercel.app/#privacy" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Privacy Policy</a>
-              <a href="https://peer-prep-six.vercel.app/#terms" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Terms of Service</a>
-              <a href="https://peer-prep-six.vercel.app/#contact" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Contact Us</a>
+            <div className="flex flex-col gap-2.5">
+              <span className="font-bold font-mono text-sm tracking-wide text-text uppercase">Quick Links</span>
+              <a href="https://hire-sense-ai-drab.vercel.app/#privacy" target="_blank" rel="noreferrer" className="text-sm text-muted hover:text-accent transition-colors">Privacy Policy</a>
+              <a href="https://hire-sense-ai-drab.vercel.app/#terms" target="_blank" rel="noreferrer" className="text-sm text-muted hover:text-accent transition-colors">Terms of Service</a>
+              <a href="https://hire-sense-ai-drab.vercel.app/#contact" target="_blank" rel="noreferrer" className="text-sm text-muted hover:text-accent transition-colors">Contact Us</a>
+              <a href="#" className="text-sm text-muted hover:text-accent transition-colors">Support</a>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <span className="font-bold text-text text-[9px] uppercase tracking-wider">Follow Us</span>
-              <a href="#" className="hover:text-accent transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-accent transition-colors">Twitter</a>
-              <a href="#" className="hover:text-accent transition-colors">GitHub</a>
+            <div className="flex flex-col gap-3">
+              <span className="font-bold font-mono text-sm tracking-wide text-text uppercase">Follow Us</span>
+              <div className="flex items-center gap-3">
+                <a href="https://www.linkedin.com/in/vikal-dubey-682818325/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-bg border border-border flex items-center justify-center text-muted hover:text-accent-cool hover:border-accent-cool/60 hover:scale-110 active:scale-95 transition-all shadow-sm" title="LinkedIn Profile">
+                  <FaLinkedin className="w-4 h-4" />
+                </a>
+                <a href="https://github.com/Vikal-Dubey" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-bg border border-border flex items-center justify-center text-muted hover:text-text hover:border-text/60 hover:scale-110 active:scale-95 transition-all shadow-sm" title="GitHub Repository">
+                  <FaGithub className="w-4 h-4" />
+                </a>
+              </div>
             </div>
 
             <div className="flex flex-col gap-2 col-span-2 sm:col-span-1">
-              <span className="font-bold text-text text-[9px] uppercase tracking-wider">Contact Us</span>
-              <span className="text-[10px] text-muted select-all">Email: info@peerprep.com</span>
-              <span className="text-[10px] text-muted">Phone: +123 456 7890</span>
-              <span className="text-[10px] text-muted">Address: 123 Main Street, City, Country</span>
+              <span className="font-bold font-mono text-sm tracking-wide text-text uppercase">Contact Us</span>
+              <span className="text-sm text-muted/80 select-all">Email: info@peerprep.com</span>
+              <span className="text-sm text-muted/80">Phone: +123 456 7890</span>
+              <span className="text-sm text-muted/80">Address: 123 Main Street, City, Country</span>
             </div>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto w-full border-t border-border/40 pt-4 mt-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] text-muted/60">
-          <span>&copy; 2026 PeerPrep. All rights reserved.</span>
-          <div className="flex gap-4">
-            <a href="#" className="hover:underline">Documentation</a>
-            <a href="#" className="hover:underline">GitHub</a>
-            <a href="#" className="hover:underline">Support</a>
-          </div>
+        <div className="max-w-4xl mx-auto w-full border-t border-border/40 pt-6 mt-8 flex justify-center text-sm text-muted/90 font-medium font-mono">
+          <span className="tracking-wide text-center text-text-light">&copy; 2026 PeerPrep. All rights reserved.</span>
         </div>
       </footer>
     </div>
