@@ -34,17 +34,23 @@ const Notepad = ({ roomId, socket }) => {
 
   return (
     <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text">
-      <div className="bg-surface px-4 py-3 border-b border-border flex items-center gap-2">
-        <span className="w-3 h-3 rounded-full bg-amber-500 animate-pulse" />
-        <span className="text-text text-sm font-semibold tracking-wide">Shared Notepad</span>
+      {/* Title Header */}
+      <div className="bg-surface px-4 py-3 border-b border-border flex items-center gap-2 select-none">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-pulse-slow absolute inline-flex h-full w-full rounded-full bg-accent-cool opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-cool"></span>
+        </span>
+        <span className="text-text text-sm font-semibold tracking-wide font-display">Workspace Notes</span>
       </div>
+      
+      {/* React Quill editor */}
       <div className="flex-1 p-2 bg-surface">
         <ReactQuill
           theme="snow"
           value={content}
           onChange={handleChange}
           className="flex-1"
-          placeholder="Jot down notes, test cases, or ideas here..."
+          placeholder="Draft mockups, technical documentation, or algorithm ideas here..."
         />
       </div>
     </div>

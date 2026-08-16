@@ -115,54 +115,54 @@ const VideoCall = ({ roomId, participants }) => {
   };
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-4 shadow-xl text-text">
+    <div className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-4 shadow-xl text-text font-display">
       {/* Video Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Local stream */}
+        {/* Local Stream */}
         <div className="relative aspect-video rounded-lg overflow-hidden bg-bg border border-border/80 group">
           <video
             ref={localVideoRef}
             autoPlay
             muted
             playsInline
-            className="w-full h-full object-cover transform -scale-x-100"
+            className="w-full h-full object-cover transform -scale-x-100 bg-[#080A0F]"
           />
           
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
           
-          <span className="absolute bottom-2 left-2 text-xs font-semibold bg-surface/80 border border-border/40 text-text px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          <span className="absolute bottom-2.5 left-2.5 text-[10px] font-mono font-bold bg-surface/90 border border-border/60 text-text px-2 py-0.5 rounded backdrop-blur-md flex items-center gap-1.5 uppercase tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-cool" />
             {user?.username || "You"} (You)
           </span>
 
           {cameraOff && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/95 text-muted gap-2">
-              <FaVideoSlash className="w-8 h-8 opacity-40 text-rose-500" />
-              <span className="text-xs font-mono">Camera is Turned Off</span>
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#080A0F] text-muted gap-2 animate-fadeIn">
+              <FaVideoSlash className="w-7 h-7 text-error/60" />
+              <span className="text-[10px] font-mono uppercase tracking-wider text-muted/60">Camera Disabled</span>
             </div>
           )}
         </div>
 
-        {/* Remote stream */}
+        {/* Remote Stream */}
         <div className="relative aspect-video rounded-lg overflow-hidden bg-bg border border-border/80 group">
           <video
             ref={remoteVideoRef}
             autoPlay
             playsInline
-            className={`w-full h-full object-cover ${!hasRemoteStream ? "hidden" : ""}`}
+            className={`w-full h-full object-cover bg-[#080A0F] ${!hasRemoteStream ? "hidden" : ""}`}
           />
 
           {!hasRemoteStream && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg/80 text-muted gap-3 p-4 text-center">
-              <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center bg-surface animate-pulse">
-                <span className="w-3.5 h-3.5 rounded-full bg-accent animate-ping" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#080A0F] text-muted gap-3 p-4 text-center">
+              <div className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-surface animate-pulse-slow">
+                <span className="w-2.5 h-2.5 rounded-full bg-accent-cool animate-ping" />
               </div>
-              <div className="space-y-0.5">
-                <p className="text-sm font-medium text-text/80">
+              <div className="space-y-0.5 select-none">
+                <p className="text-xs font-semibold text-text/80">
                   {otherParticipant ? `Connecting to ${otherParticipant.username}...` : "Waiting for Peer..."}
                 </p>
-                <p className="text-xs text-muted/60 font-mono">
-                  {otherParticipant ? "Establishing peer connection" : "Waiting for another user to join the room"}
+                <p className="text-[9px] text-muted/50 font-mono uppercase tracking-wider">
+                  {otherParticipant ? "establishing WebRTC stream" : "Awaiting peer connection"}
                 </p>
               </div>
             </div>
@@ -170,9 +170,9 @@ const VideoCall = ({ roomId, participants }) => {
 
           {hasRemoteStream && (
             <>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-              <span className="absolute bottom-2 left-2 text-xs font-semibold bg-surface/80 border border-border/40 text-text px-2.5 py-1 rounded-md backdrop-blur-sm flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+              <span className="absolute bottom-2.5 left-2.5 text-[10px] font-mono font-bold bg-surface/90 border border-border/60 text-text px-2 py-0.5 rounded backdrop-blur-md flex items-center gap-1.5 uppercase tracking-wide">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-cool" />
                 {otherParticipant?.username || "Peer"}
               </span>
             </>
@@ -181,10 +181,10 @@ const VideoCall = ({ roomId, participants }) => {
           {needsAudioUnlock && (
             <button
               onClick={handleUnlockAudio}
-              className="absolute inset-0 flex flex-col items-center justify-center bg-black/85 text-white text-sm font-bold gap-2 animate-fadeIn"
+              className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 text-white text-sm font-bold gap-2 animate-fadeIn"
             >
-              <span className="bg-accent-cool text-bg px-4 py-2 rounded-md hover:scale-105 active:scale-95 transition-all shadow-lg">
-                Enable Remote Audio/Video
+              <span className="bg-accent-cool text-bg px-4 py-2 rounded-md hover:scale-105 active:scale-95 transition-all shadow-lg text-xs font-bold font-mono">
+                Enable Remote Audio
               </span>
             </button>
           )}
@@ -192,29 +192,29 @@ const VideoCall = ({ roomId, participants }) => {
       </div>
 
       {/* Control Buttons */}
-      <div className="flex justify-center gap-4 py-1.5 border-t border-border/40 mt-1">
+      <div className="flex justify-center gap-4 py-1 border-t border-border mt-1 select-none">
         <button
           onClick={toggleMute}
-          className={`p-3 rounded-full border transition-all flex items-center justify-center active:scale-90 ${
+          className={`p-2.5 rounded-full border transition-all flex items-center justify-center active:scale-90 cursor-pointer ${
             muted
-              ? "bg-rose-500/10 border-rose-500/30 text-rose-400 hover:bg-rose-500/20"
-              : "bg-surface border-border text-text hover:bg-bg/60"
+              ? "bg-error/15 border-error/30 text-error hover:bg-error/25"
+              : "bg-surface border-border text-muted hover:text-text hover:bg-surface-elevated"
           }`}
           title={muted ? "Unmute Microphone" : "Mute Microphone"}
         >
-          {muted ? <FaMicrophoneSlash className="w-5 h-5" /> : <FaMicrophone className="w-5 h-5" />}
+          {muted ? <FaMicrophoneSlash className="w-4 h-4" /> : <FaMicrophone className="w-4 h-4" />}
         </button>
 
         <button
           onClick={toggleCamera}
-          className={`p-3 rounded-full border transition-all flex items-center justify-center active:scale-90 ${
+          className={`p-2.5 rounded-full border transition-all flex items-center justify-center active:scale-90 cursor-pointer ${
             cameraOff
-              ? "bg-rose-500/10 border-rose-500/30 text-rose-400 hover:bg-rose-500/20"
-              : "bg-surface border-border text-text hover:bg-bg/60"
+              ? "bg-error/15 border-error/30 text-error hover:bg-error/25"
+              : "bg-surface border-border text-muted hover:text-text hover:bg-surface-elevated"
           }`}
           title={cameraOff ? "Turn Camera On" : "Turn Camera Off"}
         >
-          {cameraOff ? <FaVideoSlash className="w-5 h-5" /> : <FaVideo className="w-5 h-5" />}
+          {cameraOff ? <FaVideoSlash className="w-4 h-4" /> : <FaVideo className="w-4 h-4" />}
         </button>
       </div>
     </div>

@@ -2,13 +2,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #14161A;
-  --color-surface: #1C1F26;
-  --color-border: #2A2E37;
-  --color-text: #E7E9EE;
-  --color-muted: #8B93A1;
-  --color-accent: #F5A623;
-  --color-accent-cool: #5B8DEF;
+  --color-bg: #080A0F;
+  --color-surface: #10131A;
+  --color-surface-elevated: #151923;
+  --color-border: #242936;
+  --color-text: #F5F7FA;
+  --color-muted: #8B93A3;
+  --color-accent: #8B5CF6;
+  --color-accent-cool: #22C7A5;
+  --color-error: #F05252;
 
   --font-display: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -16,6 +18,8 @@
   --animate-fadeIn: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulseGlow: pulse-glow 2s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-cursor: blink-cursor 1s steps(2, start) infinite;
 
   @keyframes fade-in {
     from {
@@ -39,10 +43,19 @@
 
   @keyframes pulse-glow {
     0%, 100% {
-      box-shadow: 0 0 4px rgba(91, 141, 239, 0.15);
+      box-shadow: 0 0 4px rgba(139, 92, 246, 0.15);
     }
     50% {
-      box-shadow: 0 0 16px rgba(91, 141, 239, 0.4);
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.35);
+    }
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
     }
   }
 }
@@ -92,7 +105,7 @@ body {
 }
 
 .ql-container.ql-snow {
-  background-color: #14161A !important;
+  background-color: var(--color-bg) !important;
   border: 1px solid var(--color-border) !important;
   border-bottom-left-radius: 0.75rem !important;
   border-bottom-right-radius: 0.75rem !important;

@@ -73,25 +73,25 @@ const Room = () => {
   if (status === "checking") {
     return (
       <div className="min-h-screen bg-bg flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 border-4 border-accent-cool border-t-transparent rounded-full animate-spin" />
-        <span className="text-muted font-mono text-sm">Verifying room security...</span>
+        <div className="w-8 h-8 border-2 border-accent-cool border-t-transparent rounded-full animate-spin" />
+        <span className="text-muted font-mono text-xs">Verifying room security...</span>
       </div>
     );
   }
 
   if (status === "invalid") {
     return (
-      <div className="min-h-screen bg-bg flex flex-col items-center justify-center gap-4 text-center px-4">
-        <div className="w-16 h-16 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-2">
+      <div className="min-h-screen bg-bg flex flex-col items-center justify-center gap-4 text-center px-4 font-display">
+        <div className="w-16 h-16 rounded-full bg-error/10 border border-error/20 flex items-center justify-center text-error mb-2 animate-fadeIn">
           <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
         <p className="text-text text-lg font-bold">Room Session Not Found</p>
-        <p className="text-muted text-sm max-w-xs">This session has expired or the link is invalid.</p>
+        <p className="text-muted text-sm max-w-xs leading-relaxed">This session has expired or the link is invalid.</p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="mt-2 bg-accent text-bg px-6 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+          className="mt-2 bg-accent hover:bg-accent/90 text-text-light px-6 py-2.5 rounded-lg font-bold text-xs transition-all cursor-pointer active:scale-95"
         >
           Return to Dashboard
         </button>
@@ -100,53 +100,55 @@ const Room = () => {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col text-text font-display">
-      {/* Sleek Top Navigation Header */}
-      <header className="bg-surface border-b border-border px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-md z-10">
+    <div className="min-h-screen bg-bg flex flex-col text-text font-display selection:bg-accent/20 selection:text-accent">
+      {/* Sleek IDE Header */}
+      <header className="bg-surface border-b border-border px-6 py-3 flex flex-wrap items-center justify-between gap-4 shadow-sm z-10 select-none">
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2" onClick={() => navigate("/dashboard")} className="cursor-pointer">
-            <span className="text-xl font-bold bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/dashboard")}>
+            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent">
               PeerPrep
             </span>
-            <span className="text-[10px] uppercase font-mono tracking-wider border border-border px-1.5 py-0.5 rounded text-muted">
-              Workspace
+            <span className="text-[9px] uppercase font-mono tracking-widest border border-border px-1.5 py-0.5 rounded text-muted font-bold bg-bg">
+              IDE
             </span>
           </div>
+          
           <div className="h-4 w-px bg-border hidden sm:block" />
+          
           <div className="flex items-center gap-2 bg-bg border border-border rounded-lg px-3 py-1.5">
-            <span className="text-xs font-mono text-muted">Room Code:</span>
-            <span className="text-xs font-mono font-bold text-accent">{roomCode}</span>
+            <span className="text-[10px] font-mono text-muted uppercase tracking-wider">ROOM:</span>
+            <span className="text-xs font-mono font-bold text-accent-cool select-all">{roomCode}</span>
             <button
               onClick={handleCopyLink}
-              className="text-muted hover:text-accent transition-colors ml-1 focus:outline-none cursor-pointer"
+              className="text-muted hover:text-accent-cool transition-colors ml-1 focus:outline-none cursor-pointer"
               title="Copy session link"
             >
-              {copied ? <FaCheck className="text-emerald-400 w-3 h-3" /> : <FaCopy className="w-3 h-3" />}
+              {copied ? <FaCheck className="text-accent-cool w-3 h-3" /> : <FaCopy className="w-3 h-3" />}
             </button>
           </div>
         </div>
 
-        {/* Participants badge and Exit Button */}
+        {/* Live Active Status & Action buttons */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-bg border border-border rounded-lg px-3.5 py-1.5">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-pulse-slow absolute inline-flex h-full w-full rounded-full bg-accent-cool opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-cool"></span>
             </span>
-            <span className="text-xs font-semibold text-text">
-              Active: {participants.length}
+            <span className="text-xs font-semibold text-text font-mono">
+              Live: {participants.length}
             </span>
-            <div className="hidden md:flex gap-1 items-center border-l border-border/80 pl-2 text-[11px] text-muted truncate max-w-[200px]" title={participants.map((p) => p.username).join(", ")}>
+            <div className="hidden md:flex gap-1 items-center border-l border-border pl-2 text-[10px] text-muted font-mono truncate max-w-[200px]" title={participants.map((p) => p.username).join(", ")}>
               {participants.map((p) => p.username).join(", ")}
             </div>
           </div>
 
           <button
             onClick={() => navigate("/dashboard")}
-            className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500 hover:text-bg text-rose-400 px-4.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer"
+            className="flex items-center gap-2 bg-error/10 border border-error/20 hover:bg-error hover:text-text-light text-error px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer active:scale-95"
           >
             <FaSignOutAlt className="w-3.5 h-3.5" />
-            Exit Room
+            Leave Room
           </button>
         </div>
       </header>
@@ -185,13 +187,13 @@ const Room = () => {
           {/* Collaboration Tabs Container */}
           <div className="flex-1 flex flex-col border border-border bg-surface rounded-xl overflow-hidden shadow-lg min-h-[450px]">
             {/* Tab Controls Bar */}
-            <div className="flex bg-surface/40 border-b border-border p-1 gap-1">
+            <div className="flex bg-surface-elevated/45 border-b border-border p-1 gap-1">
               <button
                 onClick={() => setActiveTab("notes")}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "notes"
-                    ? "bg-bg text-accent-cool border border-border shadow-md"
-                    : "text-muted hover:text-text hover:bg-bg/20"
+                    ? "bg-surface text-accent-cool border border-border shadow-sm"
+                    : "text-muted hover:text-text hover:bg-bg/25"
                 }`}
               >
                 <FaBook className="w-3.5 h-3.5" />
@@ -202,20 +204,20 @@ const Room = () => {
                 onClick={() => setActiveTab("ai")}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "ai"
-                    ? "bg-bg text-accent border border-border shadow-md"
-                    : "text-muted hover:text-text hover:bg-bg/20"
+                    ? "bg-surface text-accent border border-border shadow-sm"
+                    : "text-muted hover:text-text hover:bg-bg/25"
                 }`}
               >
                 <FaRobot className="w-3.5 h-3.5" />
-                AI Mock Interview
+                AI Assistant
               </button>
 
               <button
                 onClick={() => setActiveTab("resume")}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "resume"
-                    ? "bg-bg text-emerald-400 border border-border shadow-md"
-                    : "text-muted hover:text-text hover:bg-bg/20"
+                    ? "bg-surface text-accent border border-border shadow-sm"
+                    : "text-muted hover:text-text hover:bg-bg/25"
                 }`}
               >
                 <FaFileAlt className="w-3.5 h-3.5" />
@@ -224,7 +226,7 @@ const Room = () => {
             </div>
 
             {/* Tab Contents Frame */}
-            <div className="flex-1 p-4 bg-surface/30 overflow-y-auto max-h-[500px]">
+            <div className="flex-1 p-4 bg-surface/35 overflow-y-auto max-h-[500px]">
               {activeTab === "notes" && (
                 <div className="h-full animate-fadeIn">
                   <Notepad roomId={roomCode} socket={socket} />

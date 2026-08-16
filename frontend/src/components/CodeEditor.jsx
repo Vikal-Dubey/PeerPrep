@@ -110,23 +110,29 @@ const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) =>
   };
 
   return (
-    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg">
+    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text select-none">
+      {/* Editor top bar */}
       <div className="flex items-center justify-between bg-surface px-4 py-3 border-b border-border">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-text text-sm font-semibold tracking-wide">Collaborative Code Editor</span>
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+          </span>
+          <span className="text-text text-sm font-semibold tracking-wide font-display">Editor Canvas</span>
         </div>
         <select
           value={language}
           onChange={handleLanguageChange}
-          className="bg-bg border border-border text-text text-xs rounded-md px-3 py-1.5 outline-none focus:border-accent-cool transition-all cursor-pointer font-mono font-medium"
+          className="bg-bg border border-border text-text text-xs rounded-md px-3 py-1.5 outline-none focus:border-accent transition-all cursor-pointer font-mono font-medium"
         >
           {LANGUAGES.map((lang) => (
             <option key={lang} value={lang}>{lang.toUpperCase()}</option>
           ))}
         </select>
       </div>
-      <div className="flex-1 bg-[#1e1e1e] p-1">
+
+      {/* Editor body */}
+      <div className="flex-1 bg-[#1e1e1e] p-1.5">
         <Editor
           height="450px"
           language={language}
@@ -135,7 +141,7 @@ const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) =>
           onMount={handleEditorDidMount}
           theme="vs-dark"
           options={{
-            fontSize: 14,
+            fontSize: 13,
             fontFamily: "'JetBrains Mono', monospace",
             minimap: { enabled: false },
             automaticLayout: true,
