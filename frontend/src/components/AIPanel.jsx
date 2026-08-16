@@ -22,7 +22,6 @@ const AIPanel = ({ socket, roomId }) => {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  // Sync state over socket when other peer performs actions
   useEffect(() => {
     const handleQuestionsUpdate = (updatedQuestions) => {
       setQuestions(updatedQuestions);
@@ -61,8 +60,6 @@ const AIPanel = ({ socket, roomId }) => {
       const data = await res.json();
       const generatedQuestions = data.questions || [];
       setQuestions(generatedQuestions);
-      
-      // Broadcast the generated questions so the other participant sees them
       socket.emit("ai-questions", { roomId, questions: generatedQuestions });
     } catch (err) {
       console.error("Failed to generate questions:", err);
@@ -83,8 +80,6 @@ const AIPanel = ({ socket, roomId }) => {
       });
       const data = await res.json();
       setEvaluation(data);
-      
-      // Broadcast evaluation so peer sees feedback and score
       socket.emit("ai-evaluation", { roomId, evaluation: data, question: selectedQuestion });
     } catch (err) {
       console.error("Failed to evaluate answer:", err);
@@ -109,27 +104,27 @@ const AIPanel = ({ socket, roomId }) => {
           </span>
           AI Assistant
         </h2>
-        <p className="text-muted text-[10px] font-mono mt-1 uppercase tracking-wider">Generate questions & evaluate responses</p>
+        <p className="text-muted text-[10px] mt-1 uppercase tracking-wider">Generate questions and evaluate responses</p>
       </div>
 
       {/* Role and Difficulty selection */}
       <div className="flex flex-col gap-3 sm:flex-row select-none">
         <div className="flex-1 flex flex-col gap-1.5">
-          <label className="text-muted text-[10px] font-mono uppercase tracking-wider">Target Job Position</label>
+          <label className="text-muted text-[10px] uppercase tracking-wider font-semibold">Target job position</label>
           <input
             type="text"
             value={role}
             onChange={(e) => setRole(e.target.value)}
             placeholder="e.g. Frontend Developer"
-            className="w-full bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2 outline-none focus:border-accent transition-all placeholder:text-muted/40 font-mono"
+            className="w-full bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2 outline-none focus:border-accent transition-all placeholder:text-muted/40"
           />
         </div>
         <div className="w-full sm:w-32 flex flex-col gap-1.5">
-          <label className="text-muted text-[10px] font-mono uppercase tracking-wider">Difficulty</label>
+          <label className="text-muted text-[10px] uppercase tracking-wider font-semibold">Difficulty</label>
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
-            className="bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2 outline-none focus:border-accent transition-all font-mono cursor-pointer"
+            className="bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2 outline-none focus:border-accent transition-all cursor-pointer font-sans"
           >
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>
@@ -141,22 +136,22 @@ const AIPanel = ({ socket, roomId }) => {
       <button
         onClick={handleGenerateQuestions}
         disabled={loadingQuestions || !role.trim()}
-        className="w-full bg-accent hover:bg-accent/90 text-text-light font-bold text-xs py-2.5 rounded-lg transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-accent/15 cursor-pointer select-none"
+        className="w-full bg-accent hover:bg-accent/90 text-text-light font-bold text-xs py-2.5 rounded-lg transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-accent/15 cursor-pointer select-none font-sans"
       >
         {loadingQuestions ? (
           <span className="flex items-center justify-center gap-2">
             <span className="w-4 h-4 border-2 border-text-light border-t-transparent rounded-full animate-spin" />
-            Generating Technical Questions...
+            Generating technical questions...
           </span>
         ) : (
-          "Generate Questions"
+          "Generate questions"
         )}
       </button>
 
       {/* Questions list */}
       {questions.length > 0 && (
         <div className="flex flex-col gap-2 border-t border-border/80 pt-4">
-          <span className="text-muted text-[10px] font-mono uppercase tracking-wider mb-1 select-none">Select a question to practice:</span>
+          <span className="text-muted text-[10px] uppercase tracking-wider mb-1 select-none font-semibold">Select a question to practice:</span>
           <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
             {questions.map((q, i) => (
               <div
@@ -176,7 +171,7 @@ const AIPanel = ({ socket, roomId }) => {
                   <span className="bg-bg border border-border text-muted/80 text-[10px] font-mono px-1.5 py-0.5 rounded mt-0.5 shrink-0 select-none">
                     Q{i + 1}
                   </span>
-                  <span className="leading-relaxed">{q}</span>
+                  <span className="leading-relaxed font-sans">{q}</span>
                 </div>
                 <button
                   onClick={(e) => handleCopyQuestion(q, i, e)}
@@ -199,7 +194,7 @@ const AIPanel = ({ socket, roomId }) => {
       {selectedQuestion && (
         <div className="flex flex-col gap-3.5 border-t border-border/80 pt-4 animate-fadeIn">
           <div className="bg-bg/50 border border-border p-3 rounded-lg text-xs text-text/80 italic leading-relaxed flex justify-between items-start gap-4">
-            <span className="flex-1">"{selectedQuestion}"</span>
+            <span className="flex-1 font-sans">"{selectedQuestion}"</span>
             <button
               onClick={(e) => handleCopyQuestion(selectedQuestion, "selected", e)}
               className="p-1 rounded bg-bg border border-border text-muted hover:text-accent transition-colors shrink-0 cursor-pointer"
@@ -213,26 +208,26 @@ const AIPanel = ({ socket, roomId }) => {
             </button>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-muted text-[10px] font-mono uppercase tracking-wider select-none font-semibold">Your Response</label>
+            <label className="text-muted text-[10px] uppercase tracking-wider select-none font-semibold">Your response</label>
             <textarea
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Type your coding response here for real-time AI evaluation scorecard..."
-              className="bg-bg border border-border text-text text-xs rounded-lg px-3.5 py-2.5 h-24 outline-none focus:border-accent transition-all placeholder:text-muted/40 resize-none font-mono"
+              placeholder="Type your response here..."
+              className="bg-bg border border-border text-text text-xs rounded-lg px-3.5 py-2.5 h-24 outline-none focus:border-accent transition-all placeholder:text-muted/40 resize-none font-sans"
             />
           </div>
           <button
             onClick={handleEvaluate}
             disabled={loadingEval || !answer.trim()}
-            className="w-full bg-accent hover:bg-accent/90 text-text-light font-bold text-xs py-2.5 rounded-lg transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-accent/15 cursor-pointer select-none"
+            className="w-full bg-accent hover:bg-accent/90 text-text-light font-bold text-xs py-2.5 rounded-lg transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none shadow-md shadow-accent/15 cursor-pointer select-none font-sans"
           >
             {loadingEval ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-4 h-4 border-2 border-text-light border-t-transparent rounded-full animate-spin" />
-                Interviewer Analyzing...
+                Interviewer analyzing...
               </span>
             ) : (
-              "Evaluate Response"
+              "Evaluate response"
             )}
           </button>
         </div>
@@ -242,20 +237,20 @@ const AIPanel = ({ socket, roomId }) => {
       {evaluation && (
         <div className="border-t border-border/80 pt-4 flex flex-col gap-4.5 animate-fadeIn">
           <div className="flex items-center justify-between bg-bg/50 border border-border rounded-lg p-3 select-none">
-            <span className="text-xs font-bold font-mono uppercase tracking-wider text-muted">Technical Evaluation Score</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-muted font-sans">Technical evaluation score</span>
             <div className={`px-3 py-1 rounded border text-xs font-mono font-bold ${getScoreColor(evaluation.score)}`}>
               {evaluation.score} / 10
             </div>
           </div>
 
-          <p className="text-xs text-text/85 leading-relaxed bg-bg/25 p-3.5 rounded-lg border border-border/60">
+          <p className="text-xs text-text/85 leading-relaxed bg-bg/25 p-3.5 rounded-lg border border-border/60 font-sans">
             {evaluation.feedback}
           </p>
 
           {evaluation.strengths?.length > 0 && (
             <div className="bg-accent-cool/5 border border-accent-cool/20 rounded-lg p-3.5">
-              <p className="text-[10px] font-bold text-accent-cool font-mono uppercase tracking-wider mb-2 select-none">Key Strengths</p>
-              <ul className="space-y-1 text-xs text-text/80 pl-2 leading-relaxed">
+              <p className="text-[10px] font-bold text-accent-cool font-mono uppercase tracking-wider mb-2 select-none">Key strengths</p>
+              <ul className="space-y-1 text-xs text-text/80 pl-2 leading-relaxed font-sans">
                 {evaluation.strengths.map((s, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="text-accent-cool mt-1 shrink-0">•</span>
@@ -268,8 +263,8 @@ const AIPanel = ({ socket, roomId }) => {
 
           {evaluation.weaknesses?.length > 0 && (
             <div className="bg-error/5 border border-error/20 rounded-lg p-3.5">
-              <p className="text-[10px] font-bold text-error font-mono uppercase tracking-wider mb-2 select-none">Areas for Improvement</p>
-              <ul className="space-y-1 text-xs text-text/80 pl-2 leading-relaxed">
+              <p className="text-[10px] font-bold text-error font-mono uppercase tracking-wider mb-2 select-none">Areas for improvement</p>
+              <ul className="space-y-1 text-xs text-text/80 pl-2 leading-relaxed font-sans">
                 {evaluation.weaknesses.map((w, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="text-error mt-1 shrink-0">•</span>

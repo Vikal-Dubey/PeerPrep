@@ -13,7 +13,7 @@ const Dashboard = () => {
 
   const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
-  // Mock Workspace Simulation States
+  // Mock Workspace Simulation States (Demo mode only)
   const [simulationState, setSimulationState] = useState(0); // 0: typing, 1: compiling, 2: success, 3: ai_score
   const [simulatedCode, setSimulatedCode] = useState("");
 
@@ -139,8 +139,8 @@ const Dashboard = () => {
     <div className="min-h-screen bg-bg text-text flex flex-col font-display selection:bg-accent/20 selection:text-accent">
       {/* Sticky Header */}
       <header className="bg-surface/80 backdrop-blur-md border-b border-border sticky top-0 px-6 py-4 flex items-center justify-between z-50">
-        <div className="flex items-center gap-2 cursor-pointer animate-fadeIn" onClick={() => navigate("/")}>
-          <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent font-display">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
+          <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent">
             PeerPrep
           </span>
           <span className="text-[9px] uppercase font-mono tracking-widest border border-border px-1.5 py-0.5 rounded text-muted font-semibold bg-bg">
@@ -149,7 +149,7 @@ const Dashboard = () => {
         </div>
 
         {user && (
-          <div className="flex items-center gap-4 animate-fadeIn">
+          <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-surface-elevated border border-border rounded-lg px-3 py-1.5 shadow-sm">
               <FaUserCircle className="text-accent-cool w-4 h-4" />
               <span className="text-xs font-semibold text-text font-mono">{user.username}</span>
@@ -159,7 +159,7 @@ const Dashboard = () => {
               className="flex items-center gap-1.5 text-muted hover:text-error text-xs font-bold font-mono transition-colors cursor-pointer"
             >
               <FaSignOutAlt className="w-3.5 h-3.5" />
-              Log Out
+              Log out
             </button>
           </div>
         )}
@@ -172,11 +172,11 @@ const Dashboard = () => {
         <section className="text-center space-y-6 max-w-2xl mt-10 flex flex-col items-center animate-fadeIn">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent-cool/20 bg-accent-cool/5 text-accent-cool text-xs font-mono font-semibold tracking-wide">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-cool animate-pulse" />
-            Interview Preparation Portal
+            Interview preparation portal
           </div>
           
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-text leading-[1.1] font-display">
-            YOUR INTERVIEW.<br/>YOUR WORKSPACE.
+            Your interview.<br/>Your workspace.
           </h1>
           
           <p className="text-muted text-base md:text-lg max-w-lg leading-relaxed">
@@ -197,7 +197,7 @@ const Dashboard = () => {
               ) : (
                 <>
                   <FaPlus className="w-3.5 h-3.5" />
-                  Start an Interview
+                  Start an interview
                 </>
               )}
             </button>
@@ -205,7 +205,7 @@ const Dashboard = () => {
               onClick={scrollToActions}
               className="bg-surface border border-border hover:border-accent-cool/40 hover:bg-surface-elevated text-text font-bold text-sm px-6 py-3 rounded-lg transition-all active:scale-95 cursor-pointer"
             >
-              Join a Room
+              Join a room
             </button>
           </div>
         </section>
@@ -216,19 +216,14 @@ const Dashboard = () => {
           <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-cool opacity-75"></span>
+                <span className="animate-pulse-slow absolute inline-flex h-full w-full rounded-full bg-accent-cool opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-cool"></span>
               </span>
-              <span className="text-xs font-bold text-text font-mono">Live Session</span>
-              <span className="text-[10px] text-muted font-mono tracking-wider bg-surface-elevated border border-border px-2 py-0.5 rounded-md">
-                ROOM: X7K29P
-              </span>
+              <span className="text-xs font-bold text-text">Workspace preview</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-rose-500/80" />
-              <span className="w-2 h-2 rounded-full bg-amber-500/80" />
-              <span className="w-2 h-2 rounded-full bg-emerald-500/80" />
-              <span className="text-[10px] text-muted/60 font-mono ml-1">2 connected</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500/80 animate-pulse" />
+              <span className="text-[10px] text-muted/65 font-mono uppercase tracking-wide">Demo mode</span>
             </div>
           </div>
 
@@ -241,16 +236,16 @@ const Dashboard = () => {
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-1.5 text-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-cool" />
-                    <span className="font-mono text-text/90">Vikal</span>
+                    <span className="text-text/90">Interviewer</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-cool" />
-                    <span className="font-mono text-text/90">Rahul</span>
+                    <span className="text-text/90">Candidate</span>
                   </div>
                 </div>
               </div>
               <div className="h-10 bg-bg/50 border border-border rounded flex items-center justify-center text-[10px] font-mono text-muted/50">
-                🎥 Video Grid
+                🎥 Video grid
               </div>
             </div>
 
@@ -270,9 +265,9 @@ const Dashboard = () => {
             {/* AI Review Mockup */}
             <div className="md:col-span-4 bg-surface-elevated border border-border/80 rounded-lg p-3.5 flex flex-col justify-between h-full">
               <div className="space-y-2">
-                <span className="text-[9px] uppercase font-mono tracking-widest text-accent font-black block">AI REVIEW</span>
+                <span className="text-[9px] uppercase font-mono tracking-widest text-accent font-black block">AI feedback</span>
                 <div className="flex justify-between items-baseline border-b border-border/40 pb-1.5">
-                  <span className="text-xs font-mono font-bold text-text">Score</span>
+                  <span className="text-xs font-semibold text-text">Score</span>
                   <span className="text-base font-extrabold text-accent">
                     {simulationState === 3 ? "92%" : "--"}
                   </span>
@@ -295,13 +290,13 @@ const Dashboard = () => {
           <div className="bg-bg border border-border rounded-lg p-3 font-mono text-xs flex justify-between items-center h-10 select-none">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-accent-cool" />
-              <span className="text-muted/70 text-[10px] uppercase font-bold tracking-wide">Terminal</span>
+              <span className="text-muted/70 text-[10px] uppercase font-bold tracking-wide">Terminal output</span>
             </div>
             <div className="text-[10px]">
-              {simulationState === 0 && <span className="text-muted/40">Waiting for changes...</span>}
-              {simulationState === 1 && <span className="text-accent animate-pulse">Compiling solution in sandbox...</span>}
-              {simulationState === 2 && <span className="text-accent-cool font-bold">✓ Sandbox output synced successfully</span>}
-              {simulationState === 3 && <span className="text-accent-cool font-bold">✓ Passed 3/3 test cases</span>}
+              {simulationState === 0 && <span className="text-muted/40 font-mono">Awaiting code changes...</span>}
+              {simulationState === 1 && <span className="text-accent animate-pulse font-mono">Compiling solution in sandbox...</span>}
+              {simulationState === 2 && <span className="text-accent-cool font-bold font-mono">✓ Sandbox output synced successfully</span>}
+              {simulationState === 3 && <span className="text-accent-cool font-bold font-mono">✓ Passed 3/3 test cases</span>}
             </div>
           </div>
         </section>
@@ -317,7 +312,7 @@ const Dashboard = () => {
           {/* Create Meeting Card */}
           <div className="bg-surface border border-border rounded-xl p-6 flex flex-col justify-between items-start gap-5 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 group">
             <div className="space-y-1.5">
-              <h3 className="font-bold text-lg text-text">Host Session</h3>
+              <h3 className="font-bold text-lg text-text">Host session</h3>
               <p className="text-xs text-muted leading-relaxed">Instantly generate a room and start an interview session.</p>
             </div>
             <button
@@ -333,7 +328,7 @@ const Dashboard = () => {
               ) : (
                 <>
                   <FaPlus className="w-3 h-3" />
-                  Start an Interview
+                  Start an interview
                 </>
               )}
             </button>
@@ -342,7 +337,7 @@ const Dashboard = () => {
           {/* Join Meeting Card */}
           <div className="bg-surface border border-border rounded-xl p-6 flex flex-col justify-between items-start gap-5 hover:border-accent-cool/40 hover:shadow-lg hover:shadow-accent-cool/5 transition-all duration-300 group">
             <div className="space-y-1.5">
-              <h3 className="font-bold text-lg text-text">Join Session</h3>
+              <h3 className="font-bold text-lg text-text">Join session</h3>
               <p className="text-xs text-muted leading-relaxed">Enter a room code shared by your peer.</p>
             </div>
             <form onSubmit={handleJoin} className="w-full flex flex-col gap-2">
@@ -356,17 +351,17 @@ const Dashboard = () => {
               <button
                 type="submit"
                 disabled={!joinCode.trim()}
-                className="w-full bg-surface hover:bg-accent-cool hover:text-white border border-border hover:border-accent-cool text-text font-bold text-xs py-2.5 rounded-lg active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full bg-surface hover:bg-accent-cool hover:text-white border border-border hover:border-accent-cool text-text font-bold text-xs py-2.5 rounded-lg active:scale-95 transition-all disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 cursor-pointer font-sans"
               >
                 <FaDoorOpen className="w-3.5 h-3.5" />
-                Join an Interview
+                Join an interview
               </button>
             </form>
           </div>
         </section>
 
         {/* How It Works Timeline */}
-        <section className="w-full border-t border-border/40 pt-16 space-y-10 animate-fadeIn animate-timeline" id="timeline">
+        <section className="w-full border-t border-border/40 pt-16 space-y-10 animate-fadeIn" id="timeline">
           <h2 className="text-2xl font-bold text-center">How PeerPrep works</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
@@ -377,8 +372,8 @@ const Dashboard = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent group-hover:bg-accent group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 01
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Create or Join</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Create or join</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Log in and boot up a dynamic code room from the hub.
               </p>
             </div>
@@ -388,8 +383,8 @@ const Dashboard = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent-cool group-hover:bg-accent-cool group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 02
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Enter Workspace</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Enter the workspace</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Open the interactive compiler suite in one screen.
               </p>
             </div>
@@ -399,8 +394,8 @@ const Dashboard = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent group-hover:bg-accent group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 03
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Collaborate</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Collaborate</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Talk, note, and edit code together in sync.
               </p>
             </div>
@@ -410,8 +405,8 @@ const Dashboard = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent-cool group-hover:bg-accent-cool group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 04
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Practice & Improve</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Practice and improve</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Evaluate outputs and mock gradings with AI scorecards.
               </p>
             </div>
@@ -421,7 +416,7 @@ const Dashboard = () => {
         {/* Feature Cards Section */}
         <section id="features" className="w-full border-t border-border/40 pt-16 space-y-8">
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight">Everything You Need for Better Interviews</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Everything you need for better interviews</h2>
             <p className="text-muted text-sm max-w-md mx-auto">A unified interface mapping live actions directly to candidates and interviewers.</p>
           </div>
 
@@ -432,7 +427,7 @@ const Dashboard = () => {
                 <FaCode className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent transition-colors">Live Collaborative Coding</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent transition-colors">Live collaborative coding</h4>
                 <p className="text-xs text-muted leading-relaxed">Code simultaneously with cursor tracking, edits syncing, and auto-completions in Monaco editor.</p>
               </div>
             </div>
@@ -443,7 +438,7 @@ const Dashboard = () => {
                 <FaVideo className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent-cool transition-colors">Video Interviews</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent-cool transition-colors">Video interviews</h4>
                 <p className="text-xs text-muted leading-relaxed">Integrated low-latency WebRTC video and audio streams to communicate cleanly during problem solving.</p>
               </div>
             </div>
@@ -454,7 +449,7 @@ const Dashboard = () => {
                 <FaRobot className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent transition-colors">AI Interview Feedback</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent transition-colors">AI interview feedback</h4>
                 <p className="text-xs text-muted leading-relaxed">Get Google Gemini-powered reviews, interview grading scorecards, and custom code hints instantly.</p>
               </div>
             </div>
@@ -465,7 +460,7 @@ const Dashboard = () => {
                 <FaTerminal className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent-cool transition-colors">Code Execution</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent-cool transition-colors">Code execution</h4>
                 <p className="text-xs text-muted leading-relaxed">Run programs in a secured Judge0 compilation sandbox with custom stdin variables and test outputs.</p>
               </div>
             </div>
@@ -476,7 +471,7 @@ const Dashboard = () => {
                 <FaBook className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent transition-colors">Shared Notes</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent transition-colors">Shared notes</h4>
                 <p className="text-xs text-muted leading-relaxed">Draft documentation, jot down test cases, and model notes inside a shared rich-text Quill Notepad.</p>
               </div>
             </div>
@@ -487,7 +482,7 @@ const Dashboard = () => {
                 <FaFileAlt className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent-cool transition-colors">Resume / ATS Analysis</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent-cool transition-colors">Resume and ATS analysis</h4>
                 <p className="text-xs text-muted leading-relaxed">Scan candidate resumes dynamically against job criteria to analyze compatibility match rates.</p>
               </div>
             </div>
@@ -496,7 +491,7 @@ const Dashboard = () => {
 
         {/* SaaS Closing CTA Block */}
         <section className="w-full border-t border-border/40 pt-16 pb-6 text-center space-y-6 max-w-2xl flex flex-col items-center animate-fadeIn">
-          <h2 className="text-3xl font-extrabold tracking-tight text-text leading-tight font-display">
+          <h2 className="text-3xl font-extrabold tracking-tight text-text leading-tight">
             Stop preparing alone. Start practicing together.
           </h2>
           <p className="text-muted text-sm max-w-lg leading-relaxed font-mono">
@@ -506,7 +501,7 @@ const Dashboard = () => {
             onClick={scrollToActions}
             className="bg-accent hover:bg-accent/90 text-text-light font-bold text-sm px-6 py-3 rounded-lg transition-all active:scale-95 shadow-lg shadow-accent/15 cursor-pointer"
           >
-            Start Practicing →
+            Start practicing →
           </button>
         </section>
 
@@ -527,8 +522,8 @@ const Dashboard = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
             <div className="flex flex-col gap-2.5">
               <span className="font-bold font-mono text-xs tracking-wide text-text uppercase">Product</span>
-              <a href="#features" className="text-xs text-muted hover:text-accent transition-colors">Features</a>
-              <a href="#timeline" className="text-xs text-muted hover:text-accent transition-colors">How it works</a>
+              <a href="#features" className="text-xs text-muted hover:text-accent transition-colors font-sans font-semibold">Features</a>
+              <a href="#timeline" className="text-xs text-muted hover:text-accent transition-colors font-sans font-semibold">How it works</a>
             </div>
 
             <div className="flex flex-col gap-2.5">
@@ -545,7 +540,7 @@ const Dashboard = () => {
 
             <div className="flex flex-col gap-2 col-span-2 sm:col-span-1">
               <span className="font-bold font-mono text-xs tracking-wide text-text uppercase">Contact</span>
-              <span className="text-xs text-muted/80 select-all">info@peerprep.com</span>
+              <span className="text-xs text-muted/80 select-all font-sans">info@peerprep.com</span>
             </div>
           </div>
         </div>

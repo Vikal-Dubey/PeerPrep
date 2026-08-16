@@ -48,13 +48,13 @@ const Home = () => {
                 to="/dashboard"
                 className="bg-accent hover:bg-accent/90 text-text-light font-bold text-xs px-4 py-2 rounded-lg transition-all active:scale-95"
               >
-                Go to Dashboard
+                Go to dashboard
               </Link>
               <button
                 onClick={handleLogout}
                 className="text-xs text-muted hover:text-error transition-colors font-bold font-mono cursor-pointer"
               >
-                Log Out
+                Log out
               </button>
             </>
           ) : (
@@ -63,13 +63,13 @@ const Home = () => {
                 to="/login"
                 className="text-xs text-muted hover:text-text font-bold transition-colors"
               >
-                Sign In
+                Sign in
               </Link>
               <Link
                 to="/signup"
                 className="bg-accent hover:bg-accent/90 text-text-light font-bold text-xs px-4 py-2 rounded-lg transition-all active:scale-95 shadow-lg shadow-accent/10"
               >
-                Get Started
+                Get started
               </Link>
             </>
           )}
@@ -81,11 +81,11 @@ const Home = () => {
         <section className="text-center space-y-6 max-w-2xl flex flex-col items-center animate-fadeIn">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-mono font-semibold tracking-wide">
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            AI-Powered Developer Workspace
+            AI-powered developer workspace
           </div>
           
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-text leading-[1.1] font-display">
-            YOUR INTERVIEW.<br/>YOUR WORKSPACE.
+            Your interview.<br/>Your workspace.
           </h1>
           
           <p className="text-muted text-base md:text-lg max-w-lg leading-relaxed">
@@ -98,7 +98,7 @@ const Home = () => {
                 to="/dashboard"
                 className="bg-accent hover:bg-accent/90 text-text-light font-bold text-sm px-6 py-3 rounded-lg transition-all active:scale-95 shadow-lg shadow-accent/15"
               >
-                Enter Dashboard →
+                Enter dashboard →
               </Link>
             ) : (
               <>
@@ -106,13 +106,13 @@ const Home = () => {
                   to="/login"
                   className="bg-accent hover:bg-accent/90 text-text-light font-bold text-sm px-6 py-3 rounded-lg transition-all active:scale-95 shadow-lg shadow-accent/15"
                 >
-                  Start an Interview
+                  Start an interview
                 </Link>
                 <Link
                   to="/signup"
                   className="bg-surface border border-border hover:border-accent-cool/40 hover:bg-surface-elevated text-text font-bold text-sm px-6 py-3 rounded-lg transition-all active:scale-95"
                 >
-                  Join a Room
+                  Join a room
                 </Link>
               </>
             )}
@@ -122,7 +122,7 @@ const Home = () => {
         {/* Feature Cards Grid */}
         <section className="w-full space-y-8 border-t border-border/40 pt-16">
           <div className="text-center space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight">Everything You Need for Better Interviews</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Everything you need for better interviews</h2>
             <p className="text-muted text-sm max-w-md mx-auto">A unified interface mapping live actions directly to candidates and interviewers.</p>
           </div>
 
@@ -133,7 +133,7 @@ const Home = () => {
                 <FaCode className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent transition-colors">Live Collaborative Coding</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent transition-colors">Live collaborative coding</h4>
                 <p className="text-xs text-muted leading-relaxed">Code simultaneously with cursor tracking, edits syncing, and auto-completions in Monaco editor.</p>
               </div>
             </div>
@@ -144,7 +144,7 @@ const Home = () => {
                 <FaVideo className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent-cool transition-colors">Video Interviews</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent-cool transition-colors">Video interviews</h4>
                 <p className="text-xs text-muted leading-relaxed">Integrated low-latency WebRTC video and audio streams to communicate cleanly during problem solving.</p>
               </div>
             </div>
@@ -155,7 +155,7 @@ const Home = () => {
                 <FaRobot className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent transition-colors">AI Interview Feedback</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent transition-colors">AI interview feedback</h4>
                 <p className="text-xs text-muted leading-relaxed">Get Google Gemini-powered reviews, interview grading scorecards, and custom code hints instantly.</p>
               </div>
             </div>
@@ -166,7 +166,7 @@ const Home = () => {
                 <FaTerminal className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent-cool transition-colors">Code Execution</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent-cool transition-colors">Code execution</h4>
                 <p className="text-xs text-muted leading-relaxed">Run programs in a secured Judge0 compilation sandbox with custom stdin variables and test outputs.</p>
               </div>
             </div>
@@ -177,7 +177,7 @@ const Home = () => {
                 <FaBook className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent transition-colors">Shared Notes</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent transition-colors">Shared notes</h4>
                 <p className="text-xs text-muted leading-relaxed">Draft documentation, jot down test cases, and model notes inside a shared rich-text Quill Notepad.</p>
               </div>
             </div>
@@ -188,7 +188,7 @@ const Home = () => {
                 <FaFileAlt className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-text font-mono group-hover:text-accent-cool transition-colors">Resume / ATS Analysis</h4>
+                <h4 className="font-bold text-sm text-text group-hover:text-accent-cool transition-colors">Resume and ATS analysis</h4>
                 <p className="text-xs text-muted leading-relaxed">Scan candidate resumes dynamically against job criteria to analyze compatibility match rates.</p>
               </div>
             </div>
@@ -208,8 +208,8 @@ const Home = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent group-hover:bg-accent group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 01
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Create or Join</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Create or join</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Log in and boot up a dynamic code room from the hub.
               </p>
             </div>
@@ -219,8 +219,8 @@ const Home = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent-cool group-hover:bg-accent-cool group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 02
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Enter Workspace</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Enter the workspace</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Open the interactive compiler suite in one screen.
               </p>
             </div>
@@ -230,8 +230,8 @@ const Home = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent group-hover:bg-accent group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 03
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Collaborate</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Collaborate</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Talk, note, and edit code together in sync.
               </p>
             </div>
@@ -241,8 +241,8 @@ const Home = () => {
               <div className="w-12 h-12 rounded-full border border-border bg-surface flex items-center justify-center font-mono font-black text-base text-accent-cool group-hover:bg-accent-cool group-hover:text-bg group-hover:scale-110 transition-all duration-300 shadow">
                 04
               </div>
-              <h4 className="font-bold text-sm text-text font-mono">Practice & Improve</h4>
-              <p className="text-xs text-muted max-w-[200px] leading-relaxed font-mono">
+              <h4 className="font-bold text-sm text-text">Practice and improve</h4>
+              <p className="text-xs text-muted max-w-[200px] leading-relaxed">
                 Evaluate outputs and mock gradings with AI scorecards.
               </p>
             </div>

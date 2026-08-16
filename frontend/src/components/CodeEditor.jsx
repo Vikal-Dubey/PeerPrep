@@ -110,7 +110,7 @@ const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) =>
   };
 
   return (
-    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text select-none">
+    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text select-none font-display">
       {/* Editor top bar */}
       <div className="flex items-center justify-between bg-surface px-4 py-3 border-b border-border">
         <div className="flex items-center gap-2">
@@ -118,12 +118,12 @@ const CodeEditor = ({ roomId, socket, code, setCode, language, setLanguage }) =>
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
           </span>
-          <span className="text-text text-sm font-semibold tracking-wide font-display">Editor Canvas</span>
+          <span className="text-text text-sm font-semibold tracking-wide">Editor canvas</span>
         </div>
         <select
           value={language}
           onChange={handleLanguageChange}
-          className="bg-bg border border-border text-text text-xs rounded-md px-3 py-1.5 outline-none focus:border-accent transition-all cursor-pointer font-mono font-medium"
+          className="bg-bg border border-border text-text text-xs rounded-md px-3 py-1.5 outline-none focus:border-accent transition-all cursor-pointer font-sans font-semibold"
         >
           {LANGUAGES.map((lang) => (
             <option key={lang} value={lang}>{lang.toUpperCase()}</option>

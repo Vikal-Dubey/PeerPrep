@@ -32,17 +32,17 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-bg p-6 selection:bg-accent/20 selection:text-accent font-display">
       <div className="w-full max-w-sm flex flex-col gap-6 animate-fadeIn">
-        {/* Brand header */}
-        <div className="flex flex-col items-center gap-1.5 text-center">
+        {/* Brand Header */}
+        <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-accent to-accent-cool bg-clip-text text-transparent">
             PeerPrep
           </span>
-          <p className="text-xs text-muted font-mono tracking-wide">Developer Technical Workspace</p>
+          <p className="text-xs text-muted font-mono tracking-wide uppercase">Developer workspace</p>
         </div>
 
-        {/* Auth form container */}
+        {/* Auth Form */}
         <form onSubmit={handleSubmit} className="bg-surface border border-border p-8 rounded-xl shadow-xl flex flex-col gap-4">
-          <h1 className="text-xl font-bold text-text text-center tracking-tight mb-2">Welcome Back</h1>
+          <h1 className="text-xl font-bold text-text text-center tracking-tight mb-2">Welcome back</h1>
 
           {error && (
             <div className="bg-error/10 text-error border border-error/20 text-xs p-3 rounded-lg leading-relaxed">
@@ -51,7 +51,7 @@ const Login = () => {
           )}
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-mono text-muted/80">Email Address</label>
+            <label className="text-xs font-semibold text-text/80">Email address</label>
             <input
               type="email"
               name="email"
@@ -59,14 +59,12 @@ const Login = () => {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2.5 outline-none focus:border-accent/60 transition-all placeholder:text-muted/40 font-mono"
+              className="w-full bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2.5 outline-none focus:border-accent/60 transition-all placeholder:text-muted/40"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <div className="flex justify-between items-center">
-              <label className="text-xs font-mono text-muted/80">Password</label>
-            </div>
+            <label className="text-xs font-semibold text-text/80">Password</label>
             <input
               type="password"
               name="password"
@@ -74,22 +72,22 @@ const Login = () => {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2.5 outline-none focus:border-accent/60 transition-all placeholder:text-muted/40 font-mono"
+              className="w-full bg-bg border border-border text-text text-sm rounded-lg px-3.5 py-2.5 outline-none focus:border-accent/60 transition-all placeholder:text-muted/40"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-accent hover:bg-accent/90 text-text-light font-bold text-sm py-2.5 rounded-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none mt-2 shadow-lg shadow-accent/10"
+            className="w-full bg-accent hover:bg-accent/90 text-text-light font-bold text-sm py-2.5 rounded-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none mt-2 shadow-lg shadow-accent/10 cursor-pointer"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="w-4 h-4 border-2 border-text-light border-t-transparent rounded-full animate-spin" />
-                Signing In...
+                Signing in...
               </span>
             ) : (
-              "Sign In"
+              "Sign in"
             )}
           </button>
 

@@ -91,7 +91,7 @@ const Room = () => {
         <p className="text-muted text-sm max-w-xs leading-relaxed">This session has expired or the link is invalid.</p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="mt-2 bg-accent hover:bg-accent/90 text-text-light px-6 py-2.5 rounded-lg font-bold text-xs transition-all cursor-pointer active:scale-95"
+          className="mt-2 bg-accent hover:bg-accent/90 text-text-light px-6 py-2.5 rounded-lg font-bold text-xs transition-all cursor-pointer active:scale-95 animate-fadeIn"
         >
           Return to Dashboard
         </button>
@@ -116,7 +116,7 @@ const Room = () => {
           <div className="h-4 w-px bg-border hidden sm:block" />
           
           <div className="flex items-center gap-2 bg-bg border border-border rounded-lg px-3 py-1.5">
-            <span className="text-[10px] font-mono text-muted uppercase tracking-wider">ROOM:</span>
+            <span className="text-[10px] font-semibold text-muted uppercase tracking-wider">Room code:</span>
             <span className="text-xs font-mono font-bold text-accent-cool select-all">{roomCode}</span>
             <button
               onClick={handleCopyLink}
@@ -135,10 +135,10 @@ const Room = () => {
               <span className="animate-pulse-slow absolute inline-flex h-full w-full rounded-full bg-accent-cool opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-cool"></span>
             </span>
-            <span className="text-xs font-semibold text-text font-mono">
+            <span className="text-xs font-semibold text-text">
               Live: {participants.length}
             </span>
-            <div className="hidden md:flex gap-1 items-center border-l border-border pl-2 text-[10px] text-muted font-mono truncate max-w-[200px]" title={participants.map((p) => p.username).join(", ")}>
+            <div className="hidden md:flex gap-1 items-center border-l border-border pl-2 text-[10px] text-muted truncate max-w-[200px]" title={participants.map((p) => p.username).join(", ")}>
               {participants.map((p) => p.username).join(", ")}
             </div>
           </div>

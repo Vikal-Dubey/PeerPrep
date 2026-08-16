@@ -33,14 +33,14 @@ const Notepad = ({ roomId, socket }) => {
   };
 
   return (
-    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text">
+    <div className="flex flex-col h-full border border-border rounded-xl overflow-hidden bg-surface shadow-lg text-text font-display">
       {/* Title Header */}
       <div className="bg-surface px-4 py-3 border-b border-border flex items-center gap-2 select-none">
         <span className="relative flex h-2 w-2">
           <span className="animate-pulse-slow absolute inline-flex h-full w-full rounded-full bg-accent-cool opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-cool"></span>
         </span>
-        <span className="text-text text-sm font-semibold tracking-wide font-display">Workspace Notes</span>
+        <span className="text-text text-sm font-semibold tracking-wide">Workspace notes</span>
       </div>
       
       {/* React Quill editor */}
